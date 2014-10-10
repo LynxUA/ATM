@@ -6,6 +6,7 @@ public class Account implements Serializable{
 	private String ownerName;
 	private String cardCode;//XXXX-XXXX-XXXX-XXXX format
 	private String password;
+	private String test;
 	
 	public Account(String name, String code, String password) {
 		this.ownerName = name;
