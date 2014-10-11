@@ -13,7 +13,7 @@ public class Account implements Serializable{
 		this.password = password;
 	}
 	
-	public boolean authorize(String cardCode, String password) {
+	public boolean checkPassword(String cardCode, String password) {
 		return this.cardCode.equals(cardCode) && this.password.equals(password);
 	}
 	
