@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
 
 
 public class FileIO {
@@ -42,7 +41,7 @@ public class FileIO {
 			 out.close();
 			 fileOut.close();
 		} catch (IOException e) {
-			System.out.println("Unable to save accounts to " + fileName);
+			System.out.println("Unable to save accounts to " + fileName);//
 			e.printStackTrace();
 		}
 		

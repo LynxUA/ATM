@@ -1,10 +1,9 @@
 package com.nibu.atm;
-import java.io.Serializable;
 
 
-public class Account implements Serializable{
+public class Account {
 	private String ownerName;
-	private String cardCode;//XXXX-XXXX-XXXX-XXXX format
+	private String cardCode;//XXXX-XXXX-XXXX-XXXX format //
 	private String password;
 	
 	public Account(String name, String code, String password) {
@@ -13,7 +12,7 @@ public class Account implements Serializable{
 		this.password = password;
 	}
 	
-	public boolean authorize(String cardCode, String password) {
+	public boolean checkPassword(String cardCode, String password) {
 		return this.cardCode.equals(cardCode) && this.password.equals(password);
 	}
 	
