@@ -3,7 +3,7 @@ package com.nibu.atm;
 
 public class Account {
 	private String ownerName;
-	private String cardCode;//XXXX-XXXX-XXXX-XXXX format
+	private String cardCode;//XXXX-XXXX-XXXX-XXXX format //
 	private String password;
 	
 	public Account(String name, String code, String password) {
