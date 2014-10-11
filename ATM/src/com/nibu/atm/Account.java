@@ -1,8 +1,7 @@
 package com.nibu.atm;
-import java.io.Serializable;
 
 
-public class Account implements Serializable{
+public class Account {
 	private String ownerName;
 	private String cardCode;//XXXX-XXXX-XXXX-XXXX format
 	private String password;
