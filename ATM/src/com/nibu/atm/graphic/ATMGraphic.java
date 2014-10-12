@@ -114,7 +114,8 @@ public class ATMGraphic extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(Bank.getInstance().authorize(cardField.getText(), passwordField.getPassword().toString())){
+				//System.out.println(cardField.getText() + passwordField.getPassword());
+				if(Bank.getInstance().authorize(cardField.getText(), String.valueOf(passwordField.getPassword()))){
 					ATM.console+="Login succeded";
 					ATMGraphic.this.remove(backgroundPanel);
 					JPanel mainMenu = MainMenu.getInstance();
