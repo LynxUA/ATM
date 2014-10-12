@@ -1,7 +1,10 @@
 package com.nibu.atm;
 
+import java.io.Serializable;
+import java.util.Objects;
 
-public class Account {
+
+public class Account implements Serializable {
 	private String ownerName;
 	private String cardCode;//XXXX-XXXX-XXXX-XXXX format //
 	private String password;
@@ -23,5 +26,23 @@ public class Account {
 	public String toString() {
 		return ownerName + " " + cardCode;
 	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(ownerName, cardCode, password);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Account) {
+			Account a = (Account) obj;
+			if (a.ownerName.equals(ownerName) && a.cardCode.equals(cardCode) && a.password.equals(password))
+				return true;
+		}
+		return false;
+	}
+	
+	
+	
 
 }

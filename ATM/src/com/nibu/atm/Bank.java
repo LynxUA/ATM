@@ -33,8 +33,11 @@ public class Bank {
 	public static void main(String[] args) {
 		
 		Bank bank = Bank.bank;
+		//bank.users.clear();
+		//bank.users.put("ALEX", new Account("Alex", "ALEX", "123"));
+		//bank.users.put("DENIS", new Account("Denis", "DENIS", "321"));
 		//bank.users.put("XXXX-XXXX-XXXX-XXXX", new Account("Alex", "XXXX-XXXX-XXXX-XXXX", "qwerty"));/
-		System.out.println(bank.users.get("XXXX-XXXX-XXXX-XXXX"));
+		System.out.println(bank.users.get("DENIS"));
 		FileIO.saveFile(bank.users, "Data.txt");
 	}
 }
