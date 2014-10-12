@@ -4,7 +4,7 @@ import java.awt.EventQueue;
 
 public class ATM {
 	private static ATMGraphic atm = null;
-	static String console = "";
+	private static String console = "";
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -18,5 +18,13 @@ public class ATM {
 		});
 
 	}
+	
+	public static String getConsole(){
+		return console;
+	}
+	public static void setConsole(String console1){
+		console = console1;
+	}
+	
 
 }

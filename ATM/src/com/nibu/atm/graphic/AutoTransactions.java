@@ -144,7 +144,7 @@ public class AutoTransactions extends JPanel {
 		
 		JEditorPane pane= new JEditorPane();
 		pane.setEditable(false);
-		pane.setText(ATM.console);
+		pane.setText(ATM.getConsole());
 		pane.setBounds(0, 0, 138, 288);
 		panel_2.add(pane);
 		//System.out.println(this.getX()+"*"+this.getY());

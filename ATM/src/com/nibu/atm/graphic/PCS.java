@@ -93,7 +93,7 @@ public class PCS extends JPanel {
 		
 		JEditorPane editorPane = new JEditorPane();
 		editorPane.setEditable(false);
-		editorPane.setText(ATM.console);
+		editorPane.setText(ATM.getConsole());
 		editorPane.setBounds(0, 0, 138, 288);
 		panel.add(editorPane);
 	}

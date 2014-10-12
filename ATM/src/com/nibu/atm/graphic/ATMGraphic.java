@@ -67,7 +67,7 @@ public class ATMGraphic extends JFrame {
 		
 		editorPane = new JEditorPane();
 		editorPane.setEditable(false);
-		editorPane.setText(ATM.console);
+		editorPane.setText(ATM.getConsole());
 		editorPane.setBounds(0, 0, 138, 288);
 		panel_1.add(editorPane);
 		GroupLayout gl_backgroundPanel = new GroupLayout(backgroundPanel);
@@ -116,7 +116,7 @@ public class ATMGraphic extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				//System.out.println(cardField.getText() + passwordField.getPassword());
 				if(Bank.getInstance().authorize(cardField.getText(), String.valueOf(passwordField.getPassword()))){
-					ATM.console+="Login succeded";
+					ATM.setConsole(ATM.getConsole()+"Login succeded");
 					ATMGraphic.this.remove(backgroundPanel);
 					JPanel mainMenu = MainMenu.getInstance();
 					getContentPane().add(mainMenu);
@@ -125,8 +125,9 @@ public class ATMGraphic extends JFrame {
 					ATMGraphic.this.setVisible(true);
 					ATMGraphic.this.repaint();
 				}else{
-					ATM.console+="Login denied\nCheck card number or password\n";
-					editorPane.setText(ATM.console);
+					ATM.setConsole(ATM.getConsole()+"Login denied\nCheck card number or password\n");
+					//ATM.console+="Login denied\nCheck card number or password\n";
+					editorPane.setText(ATM.getConsole());
 				}
 			}
 		});
