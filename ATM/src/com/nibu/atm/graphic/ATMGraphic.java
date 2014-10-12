@@ -15,13 +15,16 @@ import javax.swing.GroupLayout.Alignment;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JEditorPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
+import com.nibu.atm.Bank;
 
 public class ATMGraphic extends JFrame {
 	private static JFrame instance = new ATMGraphic();
 	private JPanel backgroundPanel;
-	private JTextField textField;
+	private JTextField cardField;
 	private JPasswordField passwordField;
 	private JPanel panel_1;
 	private JEditorPane editorPane;
@@ -29,6 +32,7 @@ public class ATMGraphic extends JFrame {
 	/**
 	 * Launch the application.
 	 */
+	/*
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -41,7 +45,7 @@ public class ATMGraphic extends JFrame {
 			}
 		});
 	}
-
+*/
 	/**
 	 * Create the frame.
 	 */
@@ -63,7 +67,7 @@ public class ATMGraphic extends JFrame {
 		
 		editorPane = new JEditorPane();
 		editorPane.setEditable(false);
-		editorPane.setText("fvsrhbtenynrtsbtmggggghdfkfjhdgsfdssghdjhdgsfghjhgfghdjfdgsf");
+		editorPane.setText(ATM.console);
 		editorPane.setBounds(0, 0, 138, 288);
 		panel_1.add(editorPane);
 		GroupLayout gl_backgroundPanel = new GroupLayout(backgroundPanel);
@@ -87,13 +91,13 @@ public class ATMGraphic extends JFrame {
 		);
 		panel.setLayout(null);
 		
-		textField = new JTextField();
-		textField.setToolTipText("Номер картки");
-		textField.setText("Номер картки");
-		textField.setBounds(0, 6, 234, 29);
-		panel.add(textField);
-		textField.setHorizontalAlignment(SwingConstants.CENTER);
-		textField.setColumns(10);
+		cardField = new JTextField();
+		cardField.setToolTipText("Номер картки");
+		cardField.setText("Номер картки");
+		cardField.setBounds(0, 6, 234, 29);
+		panel.add(cardField);
+		cardField.setHorizontalAlignment(SwingConstants.CENTER);
+		cardField.setColumns(10);
 		
 		passwordField = new JPasswordField();
 		passwordField.setToolTipText("Пароль");
@@ -110,14 +114,19 @@ public class ATMGraphic extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ATMGraphic.this.remove(backgroundPanel);
-				JPanel mainMenu = MainMenu.getInstance();
-				getContentPane().add(mainMenu);
-				ATMGraphic.this.setContentPane(mainMenu);
-				
-				ATMGraphic.this.setVisible(true);
-				ATMGraphic.this.repaint();
-				
+				if(Bank.getInstance().authorize(cardField.getText(), passwordField.getPassword().toString())){
+					ATM.console+="Login succeded";
+					ATMGraphic.this.remove(backgroundPanel);
+					JPanel mainMenu = MainMenu.getInstance();
+					getContentPane().add(mainMenu);
+					ATMGraphic.this.setContentPane(mainMenu);
+					
+					ATMGraphic.this.setVisible(true);
+					ATMGraphic.this.repaint();
+				}else{
+					ATM.console+="Login denied\nCheck card number or password\n";
+					editorPane.setText(ATM.console);
+				}
 			}
 		});
 		panel.add(enter);
