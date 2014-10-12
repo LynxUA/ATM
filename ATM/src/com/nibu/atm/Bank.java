@@ -30,11 +30,16 @@ public class Bank {
 	}
 	
 	public boolean changeCreditLimit(String cardCode, long newLimit) {
-		return users.get(cardCode).expandCreditLimit(newLimit);
+		if (users.containsKey(cardCode))
+			return users.get(cardCode).expandCreditLimit(newLimit);
+		return false;
 	}
 	
 	public boolean sendMoney(String cardFrom, String cardTo, long money) {
-		if (users.get(cardFrom).reduceMoney(money)) {//Money taken succesfully
+		if (users.containsKey(cardFrom) && 
+			users.containsKey(cardTo) && 
+			users.get(cardFrom).reduceMoney(money)) //Money taken succesfully
+		{
 			users.get(cardTo).increaseMoney(money);
 			return true;
 		}
@@ -48,8 +53,12 @@ public class Bank {
 	 * @param limit Money limit
 	 * @return
 	 */
-	public void setMoneyExcessLimit(String cardFrom, String cardTo, long limit) {
-		users.get(cardFrom).setMoneyExcessLimit(users.get(cardTo), limit);
+	public boolean setMoneyExcessLimit(String cardFrom, String cardTo, long limit) {
+		if (users.containsKey(cardFrom) && users.containsKey(cardTo)) {
+			users.get(cardFrom).setMoneyExcessLimit(users.get(cardTo), limit);
+			return true;
+		}
+		return false;
 	}
 	
 	//Testing
