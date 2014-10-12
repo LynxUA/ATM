@@ -1,23 +1,23 @@
 package com.nibu.atm.graphic;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
-import javax.swing.BoxLayout;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
+
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ATMGraphic extends JFrame {
-
+	private static JFrame instance = new ATMGraphic();
 	private JPanel backgroundPanel;
 	private JTextField textField;
 	private JPasswordField passwordField;
@@ -41,7 +41,7 @@ public class ATMGraphic extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ATMGraphic() {
+	private ATMGraphic() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		backgroundPanel = new JPanel();
@@ -70,12 +70,6 @@ public class ATMGraphic extends JFrame {
 		);
 		panel.setLayout(null);
 		
-		passwordField = new JPasswordField();
-		passwordField.setToolTipText("Пароль");
-		passwordField.setBounds(0, 36, 234, 29);
-		panel.add(passwordField);
-		passwordField.setHorizontalAlignment(SwingConstants.CENTER);
-		
 		textField = new JTextField();
 		textField.setToolTipText("Номер картки");
 		textField.setText("Номер картки");
@@ -83,12 +77,36 @@ public class ATMGraphic extends JFrame {
 		panel.add(textField);
 		textField.setHorizontalAlignment(SwingConstants.CENTER);
 		textField.setColumns(10);
+		
+		passwordField = new JPasswordField();
+		passwordField.setToolTipText("Пароль");
+		passwordField.setBounds(0, 36, 234, 29);
+		panel.add(passwordField);
+		passwordField.setHorizontalAlignment(SwingConstants.CENTER);
+		
 		//textField.add
 		
-		JButton btnNewButton = new JButton("Ввійти в систему");
-		btnNewButton.setBackground(new Color(255, 255, 255));
-		btnNewButton.setBounds(48, 77, 150, 29);
-		panel.add(btnNewButton);
+		JButton enter = new JButton("Ввійти в систему");
+		enter.setBackground(new Color(255, 255, 255));
+		enter.setBounds(48, 77, 150, 29);
+		enter.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ATMGraphic.this.remove(backgroundPanel);
+				JPanel mainMenu = MainMenu.getInstance();
+				ATMGraphic.this.add(mainMenu);
+				ATMGraphic.this.setContentPane(mainMenu);
+				
+				ATMGraphic.this.setVisible(true);
+				ATMGraphic.this.repaint();
+				
+			}
+		});
+		panel.add(enter);
 		backgroundPanel.setLayout(gl_backgroundPanel);
+	}
+	public static JFrame getInstance(){
+		return instance;
 	}
 }

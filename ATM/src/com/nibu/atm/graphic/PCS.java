@@ -8,46 +8,58 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-public class ExceedingCredit extends JPanel {
+public class PCS extends JPanel {
 
-	private static JPanel instance  = new ExceedingCredit();
+	private static JPanel instance = new PCS();
+	//private JPanel contentPane;
 	private JTextField textField;
+	private JTextField textField_1;
 
 	/**
 	 * Create the frame.
 	 */
-	public ExceedingCredit() {
+	public PCS() {
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
-
 		this.setLayout(null);
 		
-		JPanel panel = new JPanel();
-		panel.setLayout(null);
-		panel.setBounds(6, 6, 438, 266);
-		this.add(panel);
+		JPanel panel_1 = new JPanel();
+		panel_1.setLayout(null);
+		panel_1.setBounds(6, 6, 438, 266);
+		this.add(panel_1);
 		
-		JLabel label = new JLabel("Кредитний ліміт");
+		JLabel label = new JLabel("Автоматичне перерахування залишку");
 		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setBounds(74, 5, 285, 23);
-		panel.add(label);
+		label.setBounds(120, 5, 285, 23);
+		panel_1.add(label);
 		
-		JLabel label_1 = new JLabel("Поточний кредитний ліміт:");
+		JLabel label_1 = new JLabel("Ліміт після якого переводимо:");
 		label_1.setBounds(10, 40, 244, 16);
-		panel.add(label_1);
+		panel_1.add(label_1);
 		
 		textField = new JTextField();
 		textField.setColumns(10);
 		textField.setBounds(10, 55, 194, 28);
-		panel.add(textField);
+		panel_1.add(textField);
+		
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		textField_1.setBounds(10, 112, 194, 28);
+		panel_1.add(textField_1);
+		
+		JLabel label_3 = new JLabel("Карта (куди переводимо):");
+		label_3.setBounds(10, 88, 178, 16);
+		panel_1.add(label_3);
 		
 		JButton save = new JButton("Зберегти");
 		save.setBounds(171, 231, 117, 29);
-		panel.add(save);
+		panel_1.add(save);
 		
 		JButton back = new JButton("Повернутися");
 		back.setBounds(0, 3, 107, 29);
@@ -55,7 +67,7 @@ public class ExceedingCredit extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JFrame mainFrame = (JFrame)ExceedingCredit.this.getTopLevelAncestor();
+				JFrame mainFrame = (JFrame)PCS.this.getTopLevelAncestor();
 				mainFrame.remove(instance);
 				JPanel ATPanel = MainMenu.getInstance();
 				mainFrame.add(ATPanel);
@@ -66,11 +78,12 @@ public class ExceedingCredit extends JPanel {
 				
 			}
 		});
-		panel.add(back);
+		panel_1.add(back);
 	}
 
 	public static JPanel getInstance() {
-		return instance;
+		// TODO Auto-generated method stub
+		return instance ;
 	}
 
 }

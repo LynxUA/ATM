@@ -2,6 +2,8 @@ package com.nibu.atm.graphic;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -11,89 +13,92 @@ import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-public class AutoTransactionInfo extends JFrame {
+public class AutoTransactionInfo extends JPanel {
 
-	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
+	private static JPanel instance = new AutoTransactionInfo();
+	//private JPanel contentPane;
+	private JTextField reciverField;
+	private JTextField descriptionField;
+	private JTextField dayField;
+	private JTextField amountField;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					AutoTransactionInfo frame = new AutoTransactionInfo();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
 	public AutoTransactionInfo() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
-		setContentPane(contentPane);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setBounds(100, 100, 450, 300);
+		//contentPane = new JPanel();
+		this.setBorder(new EmptyBorder(5, 5, 5, 5));
+		this.setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
-		contentPane.add(panel, BorderLayout.CENTER);
+		this.add(panel, BorderLayout.CENTER);
 		
 		JLabel label = new JLabel("Редагувати автоматичну транзакцію");
 		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setBounds(84, 5, 283, 23);
+		label.setBounds(119, 5, 283, 23);
 		panel.add(label);
 		
-		JLabel label_1 = new JLabel("Номер картки адресата:");
-		label_1.setBounds(10, 50, 178, 16);
-		panel.add(label_1);
+		JLabel receiver = new JLabel("Номер картки адресата:");
+		receiver.setBounds(10, 50, 178, 16);
+		panel.add(receiver);
 		
-		textField = new JTextField();
-		textField.setColumns(10);
-		textField.setBounds(10, 68, 428, 23);
-		panel.add(textField);
+		reciverField = new JTextField();
+		reciverField.setColumns(10);
+		reciverField.setBounds(10, 68, 428, 23);
+		panel.add(reciverField);
 		
-		JLabel label_2 = new JLabel("Опис:");
-		label_2.setBounds(10, 179, 178, 16);
-		panel.add(label_2);
+		JLabel description = new JLabel("Опис:");
+		description.setBounds(10, 179, 178, 16);
+		panel.add(description);
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(10, 107, 428, 28);
-		panel.add(textField_1);
+		descriptionField = new JTextField();
+		descriptionField.setColumns(10);
+		descriptionField.setBounds(10, 107, 428, 28);
+		panel.add(descriptionField);
 		
-		JLabel label_3 = new JLabel("День місяця для переказу:");
-		label_3.setBounds(10, 92, 178, 16);
-		panel.add(label_3);
+		JLabel day = new JLabel("День місяця для переказу:");
+		day.setBounds(10, 92, 178, 16);
+		panel.add(day);
 		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		textField_2.setBounds(10, 152, 428, 23);
-		panel.add(textField_2);
+		dayField = new JTextField();
+		dayField.setColumns(10);
+		dayField.setBounds(10, 152, 424, 23);
+		panel.add(dayField);
 		
-		JLabel label_4 = new JLabel("Сума переказу:");
-		label_4.setBounds(10, 132, 178, 16);
-		panel.add(label_4);
+		JLabel amount = new JLabel("Сума переказу:");
+		amount.setBounds(10, 132, 178, 16);
+		panel.add(amount);
 		
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		textField_3.setBounds(10, 195, 428, 28);
-		panel.add(textField_3);
+		amountField = new JTextField();
+		amountField.setColumns(10);
+		amountField.setBounds(10, 195, 184, 28);
+		panel.add(amountField);
 		
-		JButton button = new JButton("Обробити");
-		button.setBounds(166, 233, 117, 29);
-		panel.add(button);
+		JButton proceed = new JButton("Обробити");
+		proceed.setBounds(43, 224, 117, 29);
+		panel.add(proceed);
+		
+		JButton back = new JButton("Повернутися");
+		back.setBounds(0, 3, 107, 29);
+		back.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrame mainFrame = (JFrame)AutoTransactionInfo.this.getTopLevelAncestor();
+				mainFrame.remove(instance);
+				JPanel ATPanel = AutoTransactions.getInstance();
+				mainFrame.add(ATPanel);
+				mainFrame.setContentPane(ATPanel);
+				
+				mainFrame.setVisible(true);
+				mainFrame.repaint();
+				
+			}
+		});
+		panel.add(back);
+	}
+	public static JPanel getInstance(){
+		return instance;
 	}
 
 }

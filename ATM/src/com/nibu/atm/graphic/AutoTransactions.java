@@ -2,6 +2,8 @@ package com.nibu.atm.graphic;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -19,50 +21,31 @@ import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-public class AutoTransactions extends JFrame {
+public class AutoTransactions extends JPanel {
 
-	private JPanel contentPane;
+	private static JPanel instance = new AutoTransactions();
 	private JTable table;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					AutoTransactions frame = new AutoTransactions();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
 	 */
 	public AutoTransactions() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		this.setBorder(new EmptyBorder(5, 5, 5, 5));
+		this.setLayout(null);
 		
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 6, 238, 266);
-		contentPane.add(panel);
+		this.add(panel);
 		panel.setLayout(null);
 		//panel.add(list);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(6, 5, 226, 255);
+		scrollPane.setBounds(6, 37, 226, 223);
 		panel.add(scrollPane);
 		
 		String [] names = {"Номер картки", "Опис", "Дата", "Сума"};
@@ -78,9 +61,28 @@ public class AutoTransactions extends JFrame {
 		//table.a
 		scrollPane.add(table);
 		
+		JButton back = new JButton("Повернутися");
+		back.setBounds(0, 6, 107, 29);
+		back.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrame mainFrame = (JFrame)AutoTransactions.this.getTopLevelAncestor();
+				mainFrame.remove(instance);
+				JPanel ATPanel = MainMenu.getInstance();
+				mainFrame.add(ATPanel);
+				mainFrame.setContentPane(ATPanel);
+				
+				mainFrame.setVisible(true);
+				mainFrame.repaint();
+				
+			}
+		});
+		panel.add(back);
+		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(250, 6, 194, 266);
-		contentPane.add(panel_1);
+		this.add(panel_1);
 		panel_1.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Додати транзакцію");
@@ -127,5 +129,10 @@ public class AutoTransactions extends JFrame {
 		JButton btnNewButton = new JButton("Обробити");
 		btnNewButton.setBounds(43, 224, 117, 29);
 		panel_1.add(btnNewButton);
+	}
+
+	public static JPanel getInstance() {
+		// TODO Auto-generated method stub
+		return instance;
 	}
 }
