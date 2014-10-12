@@ -142,11 +142,11 @@ public class AutoTransactions extends JPanel {
 		add(panel_2);
 		panel_2.setLayout(null);
 		
-		JEditorPane dtrpnFvsrhbtenynrtsbtmggggghdfkfjhdgsfdssghdjhdgsfghjhgfghdjfdgsf = new JEditorPane();
-		dtrpnFvsrhbtenynrtsbtmggggghdfkfjhdgsfdssghdjhdgsfghjhgfghdjfdgsf.setEditable(false);
-		dtrpnFvsrhbtenynrtsbtmggggghdfkfjhdgsfdssghdjhdgsfghjhgfghdjfdgsf.setText("fvsrhbtenynrtsbtmggggghdfkfjhdgsfdssghdjhdgsfghjhgfghdjfdgsf");
-		dtrpnFvsrhbtenynrtsbtmggggghdfkfjhdgsfdssghdjhdgsfghjhgfghdjfdgsf.setBounds(0, 0, 138, 288);
-		panel_2.add(dtrpnFvsrhbtenynrtsbtmggggghdfkfjhdgsfdssghdjhdgsfghjhgfghdjfdgsf);
+		JEditorPane pane= new JEditorPane();
+		pane.setEditable(false);
+		pane.setText(ATM.console);
+		pane.setBounds(0, 0, 138, 288);
+		panel_2.add(pane);
 		//System.out.println(this.getX()+"*"+this.getY());
 	}
 

@@ -111,7 +111,7 @@ public class AutoTransactionInfo extends JPanel {
 		
 		JEditorPane editorPane = new JEditorPane();
 		editorPane.setEditable(false);
-		editorPane.setText("fvsrhbtenynrtsbtmggggghdfkfjhdgsfdssghdjhdgsfghjhgfghdjfdgsf");
+		editorPane.setText(ATM.console);
 		editorPane.setBounds(0, 0, 138, 288);
 		panel_1.add(editorPane);
 	}
