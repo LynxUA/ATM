@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JEditorPane;
 
 public class AutoTransactionInfo extends JPanel {
 
@@ -27,11 +28,13 @@ public class AutoTransactionInfo extends JPanel {
 		//setBounds(100, 100, 450, 300);
 		//contentPane = new JPanel();
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
-		this.setLayout(new BorderLayout(0, 0));
+		this.setBounds(100, 100, 600, 300);
+		setLayout(null);
 		
 		JPanel panel = new JPanel();
+		panel.setBounds(5, 5, 439, 290);
 		panel.setLayout(null);
-		this.add(panel, BorderLayout.CENTER);
+		this.add(panel);
 		
 		JLabel label = new JLabel("Редагувати автоматичну транзакцію");
 		label.setHorizontalAlignment(SwingConstants.CENTER);
@@ -62,7 +65,7 @@ public class AutoTransactionInfo extends JPanel {
 		
 		dayField = new JTextField();
 		dayField.setColumns(10);
-		dayField.setBounds(10, 152, 424, 23);
+		dayField.setBounds(10, 152, 428, 23);
 		panel.add(dayField);
 		
 		JLabel amount = new JLabel("Сума переказу:");
@@ -75,7 +78,7 @@ public class AutoTransactionInfo extends JPanel {
 		panel.add(amountField);
 		
 		JButton proceed = new JButton("Обробити");
-		proceed.setBounds(43, 224, 117, 29);
+		proceed.setBounds(43, 255, 117, 29);
 		panel.add(proceed);
 		
 		JButton back = new JButton("Повернутися");
@@ -87,7 +90,7 @@ public class AutoTransactionInfo extends JPanel {
 				JFrame mainFrame = (JFrame)AutoTransactionInfo.this.getTopLevelAncestor();
 				mainFrame.remove(instance);
 				JPanel ATPanel = AutoTransactions.getInstance();
-				mainFrame.add(ATPanel);
+				mainFrame.getContentPane().add(ATPanel);
 				mainFrame.setContentPane(ATPanel);
 				
 				mainFrame.setVisible(true);
@@ -96,6 +99,21 @@ public class AutoTransactionInfo extends JPanel {
 			}
 		});
 		panel.add(back);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setBounds(10, 227, 424, 16);
+		panel.add(lblNewLabel);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setLayout(null);
+		panel_1.setBounds(456, 7, 138, 288);
+		add(panel_1);
+		
+		JEditorPane editorPane = new JEditorPane();
+		editorPane.setEditable(false);
+		editorPane.setText("fvsrhbtenynrtsbtmggggghdfkfjhdgsfdssghdjhdgsfghjhgfghdjfdgsf");
+		editorPane.setBounds(0, 0, 138, 288);
+		panel_1.add(editorPane);
 	}
 	public static JPanel getInstance(){
 		return instance;

@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JEditorPane;
 
 public class PCS extends JPanel {
 
@@ -28,10 +29,11 @@ public class PCS extends JPanel {
 	public PCS() {
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
 		this.setLayout(null);
+		this.setBounds(100, 100, 600, 300);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setLayout(null);
-		panel_1.setBounds(6, 6, 438, 266);
+		panel_1.setBounds(6, 6, 438, 288);
 		this.add(panel_1);
 		
 		JLabel label = new JLabel("Автоматичне перерахування залишку");
@@ -58,7 +60,7 @@ public class PCS extends JPanel {
 		panel_1.add(label_3);
 		
 		JButton save = new JButton("Зберегти");
-		save.setBounds(171, 231, 117, 29);
+		save.setBounds(171, 253, 117, 29);
 		panel_1.add(save);
 		
 		JButton back = new JButton("Повернутися");
@@ -70,7 +72,7 @@ public class PCS extends JPanel {
 				JFrame mainFrame = (JFrame)PCS.this.getTopLevelAncestor();
 				mainFrame.remove(instance);
 				JPanel ATPanel = MainMenu.getInstance();
-				mainFrame.add(ATPanel);
+				mainFrame.getContentPane().add(ATPanel);
 				mainFrame.setContentPane(ATPanel);
 				
 				mainFrame.setVisible(true);
@@ -79,6 +81,21 @@ public class PCS extends JPanel {
 			}
 		});
 		panel_1.add(back);
+		
+		JLabel label_2 = new JLabel("");
+		label_2.setBounds(10, 225, 424, 16);
+		panel_1.add(label_2);
+		
+		JPanel panel = new JPanel();
+		panel.setLayout(null);
+		panel.setBounds(456, 6, 138, 288);
+		add(panel);
+		
+		JEditorPane editorPane = new JEditorPane();
+		editorPane.setEditable(false);
+		editorPane.setText("fvsrhbtenynrtsbtmggggghdfkfjhdgsfdssghdjhdgsfghjhgfghdjfdgsf");
+		editorPane.setBounds(0, 0, 138, 288);
+		panel.add(editorPane);
 	}
 
 	public static JPanel getInstance() {

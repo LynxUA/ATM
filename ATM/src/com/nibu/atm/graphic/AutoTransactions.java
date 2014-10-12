@@ -20,6 +20,8 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JTextArea;
+import javax.swing.JEditorPane;
 
 public class AutoTransactions extends JPanel {
 
@@ -37,15 +39,16 @@ public class AutoTransactions extends JPanel {
 	public AutoTransactions() {
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
 		this.setLayout(null);
+		this.setBounds(100, 100, 600, 300);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(0, 6, 238, 266);
+		panel.setBounds(0, 6, 238, 288);
 		this.add(panel);
 		panel.setLayout(null);
 		//panel.add(list);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(6, 37, 226, 223);
+		scrollPane.setBounds(6, 37, 226, 245);
 		panel.add(scrollPane);
 		
 		String [] names = {"Номер картки", "Опис", "Дата", "Сума"};
@@ -70,7 +73,7 @@ public class AutoTransactions extends JPanel {
 				JFrame mainFrame = (JFrame)AutoTransactions.this.getTopLevelAncestor();
 				mainFrame.remove(instance);
 				JPanel ATPanel = MainMenu.getInstance();
-				mainFrame.add(ATPanel);
+				mainFrame.getContentPane().add(ATPanel);
 				mainFrame.setContentPane(ATPanel);
 				
 				mainFrame.setVisible(true);
@@ -81,7 +84,7 @@ public class AutoTransactions extends JPanel {
 		panel.add(back);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(250, 6, 194, 266);
+		panel_1.setBounds(250, 6, 194, 288);
 		this.add(panel_1);
 		panel_1.setLayout(null);
 		
@@ -127,8 +130,24 @@ public class AutoTransactions extends JPanel {
 		textField_3.setColumns(10);
 		
 		JButton btnNewButton = new JButton("Обробити");
-		btnNewButton.setBounds(43, 224, 117, 29);
+		btnNewButton.setBounds(43, 253, 117, 29);
 		panel_1.add(btnNewButton);
+		
+		JLabel label_1 = new JLabel("");
+		label_1.setBounds(0, 225, 194, 16);
+		panel_1.add(label_1);
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.setBounds(456, 6, 138, 288);
+		add(panel_2);
+		panel_2.setLayout(null);
+		
+		JEditorPane dtrpnFvsrhbtenynrtsbtmggggghdfkfjhdgsfdssghdjhdgsfghjhgfghdjfdgsf = new JEditorPane();
+		dtrpnFvsrhbtenynrtsbtmggggghdfkfjhdgsfdssghdjhdgsfghjhgfghdjfdgsf.setEditable(false);
+		dtrpnFvsrhbtenynrtsbtmggggghdfkfjhdgsfdssghdjhdgsfghjhgfghdjfdgsf.setText("fvsrhbtenynrtsbtmggggghdfkfjhdgsfdssghdjhdgsfghjhgfghdjfdgsf");
+		dtrpnFvsrhbtenynrtsbtmggggghdfkfjhdgsfdssghdjhdgsfghjhgfghdjfdgsf.setBounds(0, 0, 138, 288);
+		panel_2.add(dtrpnFvsrhbtenynrtsbtmggggghdfkfjhdgsfdssghdjhdgsfghjhgfghdjfdgsf);
+		//System.out.println(this.getX()+"*"+this.getY());
 	}
 
 	public static JPanel getInstance() {

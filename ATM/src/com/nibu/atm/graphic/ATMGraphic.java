@@ -15,12 +15,16 @@ import javax.swing.GroupLayout.Alignment;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JEditorPane;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class ATMGraphic extends JFrame {
 	private static JFrame instance = new ATMGraphic();
 	private JPanel backgroundPanel;
 	private JTextField textField;
 	private JPasswordField passwordField;
+	private JPanel panel_1;
+	private JEditorPane editorPane;
 
 	/**
 	 * Launch the application.
@@ -43,7 +47,7 @@ public class ATMGraphic extends JFrame {
 	 */
 	private ATMGraphic() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 600, 325);
 		backgroundPanel = new JPanel();
 		backgroundPanel.setBackground(new Color(169, 169, 169));
 		backgroundPanel.setForeground(new Color(112, 128, 144));
@@ -53,20 +57,33 @@ public class ATMGraphic extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(128, 128, 128));
 		panel.setForeground(new Color(176, 196, 222));
+		
+		panel_1 = new JPanel();
+		panel_1.setLayout(null);
+		
+		editorPane = new JEditorPane();
+		editorPane.setEditable(false);
+		editorPane.setText("fvsrhbtenynrtsbtmggggghdfkfjhdgsfdssghdjhdgsfghjhgfghdjfdgsf");
+		editorPane.setBounds(0, 0, 138, 288);
+		panel_1.add(editorPane);
 		GroupLayout gl_backgroundPanel = new GroupLayout(backgroundPanel);
 		gl_backgroundPanel.setHorizontalGroup(
 			gl_backgroundPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_backgroundPanel.createSequentialGroup()
 					.addGap(105)
 					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 234, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(101, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED, 113, Short.MAX_VALUE)
+					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 138, GroupLayout.PREFERRED_SIZE))
 		);
 		gl_backgroundPanel.setVerticalGroup(
 			gl_backgroundPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_backgroundPanel.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(153, Short.MAX_VALUE))
+					.addGroup(gl_backgroundPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_backgroundPanel.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))
+						.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 288, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		panel.setLayout(null);
 		
@@ -95,7 +112,7 @@ public class ATMGraphic extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				ATMGraphic.this.remove(backgroundPanel);
 				JPanel mainMenu = MainMenu.getInstance();
-				ATMGraphic.this.add(mainMenu);
+				getContentPane().add(mainMenu);
 				ATMGraphic.this.setContentPane(mainMenu);
 				
 				ATMGraphic.this.setVisible(true);

@@ -11,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.JEditorPane;
 
 public class MainMenu extends JPanel {
 
@@ -24,9 +25,9 @@ public class MainMenu extends JPanel {
 	private MainMenu() {
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
 		this.setLayout(null);
-		
+		this.setBounds(100, 100, 600, 300);
 		JPanel panel = new JPanel();
-		panel.setBounds(6, 6, 181, 266);
+		panel.setBounds(6, 6, 181, 288);
 		this.add(panel);
 		panel.setLayout(null);
 		
@@ -39,7 +40,7 @@ public class MainMenu extends JPanel {
 				JFrame mainFrame = (JFrame)MainMenu.this.getTopLevelAncestor();
 				mainFrame.remove(instance);
 				JPanel ECPanel = ExceedingCredit.getInstance();
-				mainFrame.add(ECPanel);
+				mainFrame.getContentPane().add(ECPanel);
 				mainFrame.setContentPane(ECPanel);
 				
 				mainFrame.setVisible(true);
@@ -58,7 +59,7 @@ public class MainMenu extends JPanel {
 				JFrame mainFrame = (JFrame)MainMenu.this.getTopLevelAncestor();
 				mainFrame.remove(instance);
 				JPanel PCSPanel = PCS.getInstance();
-				mainFrame.add(PCSPanel);
+				mainFrame.getContentPane().add(PCSPanel);
 				mainFrame.setContentPane(PCSPanel);
 				
 				mainFrame.setVisible(true);
@@ -77,7 +78,7 @@ public class MainMenu extends JPanel {
 				JFrame mainFrame = (JFrame)MainMenu.this.getTopLevelAncestor();
 				mainFrame.remove(instance);
 				JPanel ATPanel = AutoTransactions.getInstance();
-				mainFrame.add(ATPanel);
+				mainFrame.getContentPane().add(ATPanel);
 				mainFrame.setContentPane(ATPanel);
 				
 				mainFrame.setVisible(true);
@@ -88,7 +89,7 @@ public class MainMenu extends JPanel {
 		panel.add(autoTransactions);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(199, 6, 245, 266);
+		panel_1.setBounds(199, 6, 245, 288);
 		this.add(panel_1);
 		panel_1.setLayout(null);
 		
@@ -115,8 +116,23 @@ public class MainMenu extends JPanel {
 		textField_1.setColumns(10);
 		
 		JButton button_2 = new JButton("Надіслати");
-		button_2.setBounds(66, 231, 117, 29);
+		button_2.setBounds(66, 253, 117, 29);
 		panel_1.add(button_2);
+		
+		JLabel label_2 = new JLabel("");
+		label_2.setBounds(6, 225, 233, 16);
+		panel_1.add(label_2);
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.setLayout(null);
+		panel_2.setBounds(456, 6, 138, 288);
+		add(panel_2);
+		
+		JEditorPane editorPane = new JEditorPane();
+		editorPane.setEditable(false);
+		editorPane.setText("fvsrhbtenynrtsbtmggggghdfkfjhdgsfdssghdjhdgsfghjhgfghdjfdgsf");
+		editorPane.setBounds(0, 0, 138, 288);
+		panel_2.add(editorPane);
 	}
 	public static JPanel getInstance() {
 		// TODO Auto-generated method stub
