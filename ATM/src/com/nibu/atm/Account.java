@@ -36,6 +36,12 @@ public class Account implements Serializable {
 		return this.cardCode.equals(cardCode) && this.password.equals(password);
 	}
 	
+	/**
+	 * Changes credit limit for this account.
+	 * @param newValue
+	 * @return Returns false if new credit limit is bigger, than maximum credit limit available
+	 * for this account. Otherwise true.
+	 */
 	public boolean expandCreditLimit(long newValue) {
 		if (newValue > maxCreditLimit)
 			return false;

@@ -23,27 +23,31 @@ public class Bank {
 		return bank;
 	}
 	
-	public boolean authorize(String cardCode, String password) {
-		if (users.containsKey(cardCode))
-			return users.get(cardCode).checkPassword(cardCode, password);
-		return false;
+	public BankOperationRes authorize(String cardCode, String password) {
+		if (!users.containsKey(cardCode))
+			return BankOperationRes.NO_SUCH_ACCOUNT;
+		if (!users.get(cardCode).checkPassword(cardCode, password))
+			return BankOperationRes.INVALID_PASSWORD;
+		return BankOperationRes.COMPLETE;
 	}
 	
-	public boolean changeCreditLimit(String cardCode, long newLimit) {
-		if (users.containsKey(cardCode))
-			return users.get(cardCode).expandCreditLimit(newLimit);
-		return false;
+	public BankOperationRes changeCreditLimit(String cardCode, long newLimit) {
+		if (!users.containsKey(cardCode))
+			return BankOperationRes.NO_SUCH_ACCOUNT;
+		if (!users.get(cardCode).expandCreditLimit(newLimit))
+			return BankOperationRes.LIMIT_OVERFLOW;
+		return BankOperationRes.COMPLETE;
 	}
 	
-	public boolean sendMoney(String cardFrom, String cardTo, long money) {
-		if (users.containsKey(cardFrom) && 
-			users.containsKey(cardTo) && 
-			users.get(cardFrom).reduceMoney(money)) //Money taken succesfully
-		{
-			users.get(cardTo).increaseMoney(money);
-			return true;
-		}
-		return false;
+	public BankOperationRes sendMoney(String cardFrom, String cardTo, long money) {
+		if (!users.containsKey(cardFrom))
+			return BankOperationRes.NO_SUCH_ACCOUNT;
+		if (!users.containsKey(cardTo))
+			return BankOperationRes.NO_ACCOUNT_TO_SEND;
+		if (!users.get(cardFrom).reduceMoney(money))
+			return BankOperationRes.NOT_ENOUGH_MONEY;
+		users.get(cardTo).increaseMoney(money);
+		return BankOperationRes.COMPLETE;
 	}
 	
 	/**
@@ -53,12 +57,13 @@ public class Bank {
 	 * @param limit Money limit
 	 * @return
 	 */
-	public boolean setMoneyExcessLimit(String cardFrom, String cardTo, long limit) {
-		if (users.containsKey(cardFrom) && users.containsKey(cardTo)) {
-			users.get(cardFrom).setMoneyExcessLimit(users.get(cardTo), limit);
-			return true;
-		}
-		return false;
+	public BankOperationRes setMoneyExcessLimit(String cardFrom, String cardTo, long limit) {
+		if (!users.containsKey(cardFrom))
+			return BankOperationRes.NO_SUCH_ACCOUNT;
+		if (!users.containsKey(cardTo))
+			return BankOperationRes.NO_ACCOUNT_TO_SEND;
+		users.get(cardFrom).setMoneyExcessLimit(users.get(cardTo), limit);
+		return BankOperationRes.COMPLETE;
 	}
 	
 	//Testing
