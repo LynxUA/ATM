@@ -61,7 +61,6 @@ public class ExceedingCredit extends JPanel {
 				JPanel ATPanel = MainMenu.getInstance();
 				mainFrame.getContentPane().add(ATPanel);
 				mainFrame.setContentPane(ATPanel);
-				
 				mainFrame.setVisible(true);
 				mainFrame.repaint();
 				

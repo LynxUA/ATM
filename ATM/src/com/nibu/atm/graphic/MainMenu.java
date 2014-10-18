@@ -13,11 +13,15 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JEditorPane;
 
+import com.nibu.atm.Bank;
+import com.nibu.atm.BankOperationRes;
+
 public class MainMenu extends JPanel {
 
 	private static  JPanel instance = new MainMenu();
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField cardField;
+	private JTextField summField;
+	private JEditorPane editorPane;
 
 	/**
 	 * Create the frame.
@@ -93,42 +97,59 @@ public class MainMenu extends JPanel {
 		this.add(panel_1);
 		panel_1.setLayout(null);
 		
-		JLabel label = new JLabel("Переказати кошти");
-		label.setBounds(66, 6, 117, 16);
-		panel_1.add(label);
+		JLabel sendLabel = new JLabel("Переказати кошти");
+		sendLabel.setBounds(66, 6, 117, 16);
+		panel_1.add(sendLabel);
 		
-		JLabel label2 = new JLabel("Номер карти одержувача:");
-		label2.setBounds(6, 33, 177, 16);
-		panel_1.add(label2);
+		JLabel cardLabel = new JLabel("Номер карти одержувача:");
+		cardLabel.setBounds(6, 33, 177, 16);
+		panel_1.add(cardLabel);
 		
-		textField = new JTextField();
-		textField.setBounds(6, 50, 233, 28);
-		panel_1.add(textField);
-		textField.setColumns(10);
+		cardField = new JTextField();
+		cardField.setBounds(6, 50, 233, 28);
+		panel_1.add(cardField);
+		cardField.setColumns(10);
 		
-		JLabel label_1 = new JLabel("Сума:");
-		label_1.setBounds(6, 80, 61, 16);
-		panel_1.add(label_1);
+		JLabel summLabel = new JLabel("Сума:");
+		summLabel.setBounds(6, 80, 61, 16);
+		panel_1.add(summLabel);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(6, 100, 233, 28);
-		panel_1.add(textField_1);
-		textField_1.setColumns(10);
+		summField = new JTextField();
+		summField.setBounds(6, 100, 233, 28);
+		panel_1.add(summField);
+		summField.setColumns(10);
 		
-		JButton button_2 = new JButton("Надіслати");
-		button_2.setBounds(66, 253, 117, 29);
-		panel_1.add(button_2);
-		
-		JLabel label_2 = new JLabel("");
-		label_2.setBounds(6, 225, 233, 16);
-		panel_1.add(label_2);
+		JButton send = new JButton("Надіслати");
+		send.setBounds(66, 253, 117, 29);
+		panel_1.add(send);
+		send.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				BankOperationRes result = Bank.getInstance().sendMoney(ATM.getCardNumber(), cardField.getText(), Long.parseLong(summField.getText()));
+				if(result==BankOperationRes.COMPLETE){
+					ATM.setConsole(ATM.getConsole()+"Money was sent\n");
+					cardField.setText("");
+					summField.setText("");
+				}else if(result == BankOperationRes.NO_ACCOUNT_TO_SEND){
+					ATM.setConsole(ATM.getConsole()+"Operation denied\nCheck the reciever card number\n");
+					editorPane.setText(ATM.getConsole());
+				}else if(result == BankOperationRes.NOT_ENOUGH_MONEY){
+					ATM.setConsole(ATM.getConsole()+"Operation denied\nYou don't have enough money\n");
+					editorPane.setText(ATM.getConsole());
+				}else{
+					System.err.println("Unexpectable result");
+				}
+				
+			}
+		});
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setLayout(null);
 		panel_2.setBounds(456, 6, 138, 288);
 		add(panel_2);
 		
-		JEditorPane editorPane = new JEditorPane();
+		editorPane = new JEditorPane();
 		editorPane.setEditable(false);
 		editorPane.setText(ATM.getConsole());
 		editorPane.setBounds(0, 0, 138, 288);

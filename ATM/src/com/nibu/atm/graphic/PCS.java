@@ -16,12 +16,16 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 
+import com.nibu.atm.Bank;
+import com.nibu.atm.BankOperationRes;
+
 public class PCS extends JPanel {
 
 	private static JPanel instance = new PCS();
 	//private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField limitField;
+	private JTextField cardField;
+	private JEditorPane editorPane;
 
 	/**
 	 * Create the frame.
@@ -36,32 +40,50 @@ public class PCS extends JPanel {
 		panel_1.setBounds(6, 6, 438, 288);
 		this.add(panel_1);
 		
-		JLabel label = new JLabel("Автоматичне перерахування залишку");
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setBounds(120, 5, 285, 23);
-		panel_1.add(label);
+		JLabel autoLabel = new JLabel("Автоматичне перерахування залишку");
+		autoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		autoLabel.setBounds(120, 5, 285, 23);
+		panel_1.add(autoLabel);
 		
-		JLabel label_1 = new JLabel("Ліміт після якого переводимо:");
-		label_1.setBounds(10, 40, 244, 16);
-		panel_1.add(label_1);
+		JLabel limitLabel = new JLabel("Ліміт після якого переводимо:");
+		limitLabel.setBounds(10, 40, 244, 16);
+		panel_1.add(limitLabel);
 		
-		textField = new JTextField();
-		textField.setColumns(10);
-		textField.setBounds(10, 55, 194, 28);
-		panel_1.add(textField);
+		limitField = new JTextField();
+		limitField.setColumns(10);
+		limitField.setBounds(10, 55, 194, 28);
+		panel_1.add(limitField);
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(10, 112, 194, 28);
-		panel_1.add(textField_1);
+		JLabel cardLabel = new JLabel("Карта (куди переводимо):");
+		cardLabel.setBounds(10, 88, 178, 16);
+		panel_1.add(cardLabel);
 		
-		JLabel label_3 = new JLabel("Карта (куди переводимо):");
-		label_3.setBounds(10, 88, 178, 16);
-		panel_1.add(label_3);
+		cardField = new JTextField();
+		cardField.setColumns(10);
+		cardField.setBounds(10, 112, 194, 28);
+		panel_1.add(cardField);
 		
 		JButton save = new JButton("Зберегти");
 		save.setBounds(171, 253, 117, 29);
 		panel_1.add(save);
+		save.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				BankOperationRes result = Bank.getInstance().setMoneyExcessLimit(ATM.getCardNumber(), cardField.getText(), Long.parseLong(limitField.getText()));
+				if(result==BankOperationRes.COMPLETE){
+					ATM.setConsole(ATM.getConsole()+"Limit changed\n");
+					cardField.setText("");
+					limitField.setText("");
+				}else if(result == BankOperationRes.NO_ACCOUNT_TO_SEND){
+					ATM.setConsole(ATM.getConsole()+"Operation denied\nCheck the reciever card number\n");
+					editorPane.setText(ATM.getConsole());
+				}else{
+					System.err.println("Unexpectable result");
+				}
+				
+			}
+		});
 		
 		JButton back = new JButton("Повернутися");
 		back.setBounds(0, 3, 107, 29);
@@ -91,7 +113,7 @@ public class PCS extends JPanel {
 		panel.setBounds(456, 6, 138, 288);
 		add(panel);
 		
-		JEditorPane editorPane = new JEditorPane();
+		editorPane = new JEditorPane();
 		editorPane.setEditable(false);
 		editorPane.setText(ATM.getConsole());
 		editorPane.setBounds(0, 0, 138, 288);

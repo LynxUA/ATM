@@ -20,6 +20,7 @@ import javax.swing.JEditorPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import com.nibu.atm.Bank;
+import com.nibu.atm.BankOperationRes;
 
 public class ATMGraphic extends JFrame {
 	private static JFrame instance = new ATMGraphic();
@@ -115,8 +116,10 @@ public class ATMGraphic extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//System.out.println(cardField.getText() + passwordField.getPassword());
-				if(Bank.getInstance().authorize(cardField.getText(), String.valueOf(passwordField.getPassword()))){
+				BankOperationRes result = Bank.getInstance().authorize(cardField.getText(), String.valueOf(passwordField.getPassword()));
+				if(result==BankOperationRes.COMPLETE){
 					ATM.setConsole(ATM.getConsole()+"Login succeded");
+					ATM.setCardNumber(cardField.getText());
 					ATMGraphic.this.remove(backgroundPanel);
 					JPanel mainMenu = MainMenu.getInstance();
 					getContentPane().add(mainMenu);
@@ -124,10 +127,14 @@ public class ATMGraphic extends JFrame {
 					
 					ATMGraphic.this.setVisible(true);
 					ATMGraphic.this.repaint();
-				}else{
-					ATM.setConsole(ATM.getConsole()+"Login denied\nCheck card number or password\n");
-					//ATM.console+="Login denied\nCheck card number or password\n";
+				}else if(result==BankOperationRes.NO_SUCH_ACCOUNT){
+					ATM.setConsole(ATM.getConsole()+"Login denied\nCheck card number\n");
 					editorPane.setText(ATM.getConsole());
+				}else if(result==BankOperationRes.INVALID_PASSWORD){
+					ATM.setConsole(ATM.getConsole()+"Login denied\nCheck password\n");
+					editorPane.setText(ATM.getConsole());
+				}else{
+					System.err.println("Unexpectable result");
 				}
 			}
 		});

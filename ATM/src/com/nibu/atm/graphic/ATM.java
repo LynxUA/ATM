@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 public class ATM {
 	private static ATMGraphic atm = null;
 	private static String console = "";
+	private static String cardNumber = null;
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -24,6 +25,14 @@ public class ATM {
 	}
 	public static void setConsole(String console1){
 		console = console1;
+	}
+
+	public static void setCardNumber(String text) {
+		cardNumber = text;
+		
+	}
+	public static String getCardNumber(){
+		return cardNumber;
 	}
 	
 
