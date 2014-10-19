@@ -19,8 +19,9 @@ public class Account implements Serializable {
 	private String ownerName;
 	private String cardCode;//XXXX-XXXX-XXXX-XXXX format
 	private String password;
-	private long money;
-	private MoneyExcess moneyExcess;
+	long balance;
+	Account protectingAccount;
+	long protectMoneyAmount;
 	
 	public Account(String name, String code, String password) {
 		this.ownerName = name;
@@ -28,8 +29,7 @@ public class Account implements Serializable {
 		this.password = password;
 		creditLimit = BASE_CREDIT_LIMIT;
 		maxCreditLimit = BASE_MAX_CREDIT_LIMIT;
-		money = 0;
-		moneyExcess = new NoMoneyExcess();
+		balance = 0;
 	}
 	
 	public boolean checkPassword(String cardCode, String password) {
@@ -48,23 +48,42 @@ public class Account implements Serializable {
 		maxCreditLimit = newValue;
 		return true;
 	}
+	
+	public void setMoneyExcessLimit(Account protectingAccount, long limit) {
+		this.protectingAccount = protectingAccount;
+		this.protectMoneyAmount = limit;
+	}
+	
+	public boolean reduceBalance(long money) {
+		if (balance + creditLimit - money >= 0) {
+			balance -= money;
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @return Maximum credit limit that this account may have.(Value may be increased according to bank decision.)
+	 */
+	public long getMaxCreditLimit() {
+		return maxCreditLimit;
+	}
+	
+	/**
+	 * 
+	 * @return Current credit limit for this account.
+	 */
+	public long getCreditLimit() {
+		return creditLimit;
+	}
+	
 	public String getName() {
 		return ownerName;
 	}
 	
-	public String toString() {
-		return ownerName + " " + cardCode;
-	}
-	
-	public boolean reduceMoney(long money) {
-		if (this.money + creditLimit < money)
-			return false;
-		this.money -= money;
-		return true;
-	}
-	
-	public void increaseMoney(long money) {
-		moneyExcess.transfer(money);
+	public long getBalance() {
+		return balance;
 	}
 	
 	@Override
@@ -72,8 +91,9 @@ public class Account implements Serializable {
 		return Objects.hash(ownerName, cardCode, password);
 	}
 	
-	public void setMoneyExcessLimit(Account protectingAccount, long limit) {
-		moneyExcess = new AccountMoneyExcess(protectingAccount, limit);
+	@Override
+	public String toString() {
+		return ownerName + " " + cardCode;
 	}
 	
 	@Override
@@ -84,40 +104,6 @@ public class Account implements Serializable {
 				return true;
 		}
 		return false;
-	}
-	
-	
-	private interface MoneyExcess extends Serializable{
-		public void transfer(long money);
-	}
-	
-	private class AccountMoneyExcess implements MoneyExcess {
-		private Account protectingAccount;
-		private long limit;
-		
-		public AccountMoneyExcess(Account protectingAccount, long limit) {
-			this.protectingAccount = protectingAccount;
-			this.limit = limit;
-		}
-		@Override
-		public void transfer(long moneyToTake) {
-			money += moneyToTake;
-			if (money > limit) {
-				long rest = money - limit;
-				if (reduceMoney(rest)) {
-					protectingAccount.reduceMoney(rest);
-				}
-			}
-		}
-	}
-	
-	private class NoMoneyExcess implements MoneyExcess {
-
-		@Override
-		public void transfer(long moneyToTake) { 
-			money += moneyToTake;
-		}
-		
 	}
 
 }

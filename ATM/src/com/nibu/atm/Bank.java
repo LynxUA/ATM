@@ -5,7 +5,8 @@ import java.util.HashMap;
 
 public class Bank {
 	private static Bank bank = new Bank();
-	public HashMap<String, Account> users;
+	private HashMap<String, Account> users;
+	private TransactionsProcessor transactionsProcessor;
 	
 	private Bank() {
 		File accountsStored = new File("Data.txt");
@@ -17,6 +18,8 @@ public class Bank {
 		} 
 		if (users == null)
 			users = new HashMap<String, Account>();
+		//TODO
+		transactionsProcessor = new TransactionsProcessor();
 	}
 	
 	public static Bank getInstance() {
@@ -44,9 +47,19 @@ public class Bank {
 			return BankOperationRes.NO_SUCH_ACCOUNT;
 		if (!users.containsKey(cardTo))
 			return BankOperationRes.NO_ACCOUNT_TO_SEND;
-		if (!users.get(cardFrom).reduceMoney(money))
+		if (!transactionsProcessor.add(new Transaction(users.get(cardFrom), users.get(cardTo), money)))
 			return BankOperationRes.NOT_ENOUGH_MONEY;
-		users.get(cardTo).increaseMoney(money);
+		return BankOperationRes.COMPLETE;
+	}
+	
+	public BankOperationRes addAutoTransaction(String cardFrom, String cardTo, int dayNumber, long money) {
+		if (!users.containsKey(cardFrom))
+			return BankOperationRes.NO_SUCH_ACCOUNT;
+		if (!users.containsKey(cardTo))
+			return BankOperationRes.NO_ACCOUNT_TO_SEND;
+		if (dayNumber < 1 || dayNumber > 28)
+			return BankOperationRes.INVALID_DAY;
+		transactionsProcessor.add(new AutoTransaction(users.get(cardFrom), users.get(cardTo), money, dayNumber));
 		return BankOperationRes.COMPLETE;
 	}
 	
@@ -64,6 +77,30 @@ public class Bank {
 			return BankOperationRes.NO_ACCOUNT_TO_SEND;
 		users.get(cardFrom).setMoneyExcessLimit(users.get(cardTo), limit);
 		return BankOperationRes.COMPLETE;
+	}
+	
+	/**
+	 * 
+	 * @return Maximum credit limit that this account may have.(Value may be increased according to bank decision.)
+	 */
+	public long getMaxCreditLimit(String cardNumber) {
+		return users.get(cardNumber).getMaxCreditLimit();
+	}
+	
+	/**
+	 * 
+	 * @return Current credit limit for this account.
+	 */
+	public long getCreditLimit(String cardNumber) {
+		return users.get(cardNumber).getCreditLimit();
+	}
+	
+	public String getName(String cardNumber) {
+		return users.get(cardNumber).getName();
+	}
+	
+	public long getBalance(String cardNumber) {
+		return users.get(cardNumber).getBalance();
 	}
 	
 	//Testing
