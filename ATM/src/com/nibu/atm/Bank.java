@@ -1,6 +1,9 @@
 package com.nibu.atm;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class Bank {
@@ -63,6 +66,15 @@ public class Bank {
 		return BankOperationRes.COMPLETE;
 	}
 	
+	public BankOperationRes editAutoTransaction(AutoTransaction transaction, String cardTo, int dayNumber, long money, String description) {
+		if (!users.containsKey(cardTo))
+			return BankOperationRes.NO_ACCOUNT_TO_SEND;
+		if (dayNumber < 1 || dayNumber > 28)
+			return BankOperationRes.INVALID_DAY;
+		transaction.edit(users.get(cardTo), money, dayNumber, description);
+		return BankOperationRes.COMPLETE;
+	}
+	
 	/**
 	 * If account after transaction has more money than limit, the rest of money would be sent to another account.
 	 * @param cardFrom A card we set limit for
@@ -101,6 +113,16 @@ public class Bank {
 	
 	public long getBalance(String cardNumber) {
 		return users.get(cardNumber).getBalance();
+	}
+	
+	public List<AutoTransaction> getAutoTransactions(String cardNumber) {
+		if (users.containsKey(cardNumber)) {
+			Account account = users.get(cardNumber);
+			//Not deep copy, just to avoid removing objects from account.autoTransactions
+			List<AutoTransaction> result = new ArrayList<AutoTransaction>(account.autoTransactions);
+			return result;
+		}
+		return null;
 	}
 	
 	//Testing

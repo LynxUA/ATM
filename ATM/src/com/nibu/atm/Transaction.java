@@ -18,4 +18,16 @@ public class Transaction {
 		}
 		return false;
 	}
+	
+	public String getCardFromNumber() {
+		return from.getCardNumber();
+	}
+	
+	public String getCardToNumber() {
+		return to.getCardNumber();
+	}
+	
+	public long getMoneyAmount() {
+		return moneyAmount;
+	}
 }

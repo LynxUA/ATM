@@ -11,6 +11,7 @@ public class AutoTransaction extends Transaction{
 		super(from, to, moneyAmount);
 		this.dayOfMonth = monthDay;
 		this.description = description;
+		this.monthLastTransfer = 0;
 	}
 	
 	
@@ -27,6 +28,21 @@ public class AutoTransaction extends Transaction{
 			}
 		}
 		return true;
+	}
+	
+	void edit(Account to, long moneyAmount, int monthDay, String description) {
+		this.to = to;
+		this.moneyAmount = moneyAmount;
+		this.dayOfMonth = monthDay;
+		this.description = description;
+	}
+	
+	public int getDay() {
+		return dayOfMonth;
+	}
+	
+	public String getDescription() {
+		return description;
 	}
 	
 }

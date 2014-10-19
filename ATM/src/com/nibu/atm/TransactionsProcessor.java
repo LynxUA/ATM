@@ -12,9 +12,11 @@ public class TransactionsProcessor {
 	}
 	
 	public boolean add(Transaction transaction) {
-		if (transaction instanceof AutoTransaction)
+		if (transaction instanceof AutoTransaction) {
 			autoTransactions.add(transaction);
-		else {
+			AutoTransaction autoTransaction = (AutoTransaction) transaction;
+			autoTransaction.from.autoTransactions.add(autoTransaction);
+		} else {
 			if (transaction.process()) {//Transaction was successful
 				Account to = transaction.to;
 				if (to.protectingAccount != null) {

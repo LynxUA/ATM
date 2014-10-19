@@ -1,10 +1,13 @@
 package com.nibu.atm;
 
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 
 public class Account implements Serializable {
+	List<AutoTransaction> autoTransactions = new LinkedList<AutoTransaction>();
 	/** Each card when account created has base credit limit*/
 	public static final long BASE_CREDIT_LIMIT = 1500;
 	/** Basically credit limit may be expanded to this value */
@@ -86,6 +89,9 @@ public class Account implements Serializable {
 		return balance;
 	}
 	
+	public String getCardNumber() {
+		return cardCode;
+	}
 	@Override
 	public int hashCode() {
 		return Objects.hash(ownerName, cardCode, password);
