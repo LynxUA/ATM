@@ -45,7 +45,7 @@ public class Account implements Serializable {
 	public boolean expandCreditLimit(long newValue) {
 		if (newValue > maxCreditLimit)
 			return false;
-		maxCreditLimit = newValue;
+		creditLimit = newValue;
 		return true;
 	}
 	
