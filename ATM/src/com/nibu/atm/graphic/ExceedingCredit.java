@@ -14,11 +14,14 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 
+import com.nibu.atm.Bank;
+import com.nibu.atm.BankOperationRes;
+
 public class ExceedingCredit extends JPanel {
 
 	private static JPanel instance  = new ExceedingCredit();
-	private JTextField textField;
-
+	private JTextField limitField;
+	private JEditorPane editorPane;
 	/**
 	 * Create the frame.
 	 */
@@ -32,23 +35,41 @@ public class ExceedingCredit extends JPanel {
 		panel.setBounds(6, 6, 438, 288);
 		this.add(panel);
 		
-		JLabel label = new JLabel("Кредитний ліміт");
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setBounds(74, 5, 285, 23);
-		panel.add(label);
+		JLabel limitLabel = new JLabel("Кредитний ліміт");
+		limitLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		limitLabel.setBounds(119, 5, 240, 23);
+		panel.add(limitLabel);
 		
-		JLabel label_1 = new JLabel("Поточний кредитний ліміт:");
-		label_1.setBounds(10, 40, 244, 16);
-		panel.add(label_1);
+		JLabel currentLimitLabel = new JLabel("Поточний кредитний ліміт:");
+		currentLimitLabel.setBounds(10, 40, 244, 16);
+		panel.add(currentLimitLabel);
 		
-		textField = new JTextField();
-		textField.setColumns(10);
-		textField.setBounds(10, 55, 194, 28);
-		panel.add(textField);
+		limitField = new JTextField();
+		limitField.setColumns(10);
+		limitField.setBounds(10, 55, 194, 28);
+		panel.add(limitField);
 		
 		JButton save = new JButton("Зберегти");
 		save.setBounds(171, 253, 117, 29);
 		panel.add(save);
+		save.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				BankOperationRes result = Bank.getInstance().changeCreditLimit(ATM.getCardNumber(), Integer.parseInt(limitField.getText()));
+				if(result==BankOperationRes.COMPLETE){
+					ATM.setConsole(ATM.getConsole()+"Limit changed to " + limitField.getText() +"\n");
+					limitField.setText("");
+					editorPane.setText(ATM.getConsole());
+				}else if(result == BankOperationRes.LIMIT_OVERFLOW){
+					ATM.setConsole(ATM.getConsole()+"Operation denied\nThe limit is higher then bank can give\n");
+					editorPane.setText(ATM.getConsole());
+				}else{
+					System.err.println("Unexpectable result");
+				}
+				
+			}
+		});
 		
 		JButton back = new JButton("Повернутися");
 		back.setBounds(0, 3, 107, 29);
@@ -59,6 +80,7 @@ public class ExceedingCredit extends JPanel {
 				JFrame mainFrame = (JFrame)ExceedingCredit.this.getTopLevelAncestor();
 				mainFrame.remove(instance);
 				JPanel ATPanel = MainMenu.getInstance();
+				MainMenu.refresh();
 				mainFrame.getContentPane().add(ATPanel);
 				mainFrame.setContentPane(ATPanel);
 				mainFrame.setVisible(true);
@@ -68,16 +90,12 @@ public class ExceedingCredit extends JPanel {
 		});
 		panel.add(back);
 		
-		JLabel label_2 = new JLabel("");
-		label_2.setBounds(10, 225, 424, 16);
-		panel.add(label_2);
-		
 		JPanel panel_1 = new JPanel();
 		panel_1.setLayout(null);
 		panel_1.setBounds(456, 6, 138, 288);
 		add(panel_1);
 		
-		JEditorPane editorPane = new JEditorPane();
+		editorPane = new JEditorPane();
 		editorPane.setEditable(false);
 		editorPane.setText(ATM.getConsole());
 		editorPane.setBounds(0, 0, 138, 288);

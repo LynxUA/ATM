@@ -6,7 +6,7 @@ public class Console extends JEditorPane{
 	private static Console instance = new Console();
 	private Console(){
 		this.setEditable(false);
-		this.setText("fvsrhbtenynrtsbtmggggghdfkfjhdgsfdssghdjhdgsfghjhgfghdjfdgsf");
+		this.setText("");
 		this.setBounds(0, 0, 138, 288);
 	}
 	public static JEditorPane getInstance(){

@@ -23,15 +23,19 @@ import javax.swing.JButton;
 import javax.swing.JTextArea;
 import javax.swing.JEditorPane;
 
+import com.nibu.atm.Bank;
+import com.nibu.atm.BankOperationRes;
+
 public class AutoTransactions extends JPanel {
 
 	private static JPanel instance = new AutoTransactions();
 	private JTable table;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-
+	private JTextField recieverField;
+	private JTextField descriptionField;
+	private JTextField dayField;
+	private JTextField amountField;
+	
+	private JEditorPane pane;
 
 	/**
 	 * Create the frame.
@@ -73,6 +77,7 @@ public class AutoTransactions extends JPanel {
 				JFrame mainFrame = (JFrame)AutoTransactions.this.getTopLevelAncestor();
 				mainFrame.remove(instance);
 				JPanel ATPanel = MainMenu.getInstance();
+				MainMenu.refresh();
 				mainFrame.getContentPane().add(ATPanel);
 				mainFrame.setContentPane(ATPanel);
 				
@@ -88,61 +93,91 @@ public class AutoTransactions extends JPanel {
 		this.add(panel_1);
 		panel_1.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Додати транзакцію");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(0, 5, 147, 23);
-		panel_1.add(lblNewLabel);
+		JLabel addTransactionLabel = new JLabel("Додати транзакцію");
+		addTransactionLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		addTransactionLabel.setBounds(0, 5, 147, 23);
+		panel_1.add(addTransactionLabel);
 		
-		JLabel lblNewLabel_1 = new JLabel("Номер картки адресата:");
-		lblNewLabel_1.setBounds(10, 40, 178, 16);
-		panel_1.add(lblNewLabel_1);
+		JLabel recieverLabel = new JLabel("Номер картки адресата:");
+		recieverLabel.setBounds(10, 40, 178, 16);
+		panel_1.add(recieverLabel);
 		
-		textField = new JTextField();
-		textField.setBounds(0, 57, 194, 28);
-		panel_1.add(textField);
-		textField.setColumns(10);
+		recieverField = new JTextField();
+		recieverField.setBounds(0, 57, 194, 28);
+		panel_1.add(recieverField);
+		recieverField.setColumns(10);
 		
-		JLabel lblNewLabel_2 = new JLabel("Опис:");
-		lblNewLabel_2.setBounds(10, 179, 178, 16);
-		panel_1.add(lblNewLabel_2);
+		JLabel descriptionLabel = new JLabel("Опис:");
+		descriptionLabel.setBounds(10, 179, 178, 16);
+		panel_1.add(descriptionLabel);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(0, 105, 194, 28);
-		panel_1.add(textField_1);
-		textField_1.setColumns(10);
+		descriptionField = new JTextField();
+		descriptionField.setBounds(0, 105, 194, 28);
+		panel_1.add(descriptionField);
+		descriptionField.setColumns(10);
 		
-		JLabel lblNewLabel_3 = new JLabel("День місяця для переказу:");
-		lblNewLabel_3.setBounds(10, 88, 178, 16);
-		panel_1.add(lblNewLabel_3);
+		JLabel dayLabel = new JLabel("День місяця для переказу (1-28):");
+		dayLabel.setBounds(10, 88, 178, 16);
+		panel_1.add(dayLabel);
 		
-		textField_2 = new JTextField();
-		textField_2.setBounds(0, 152, 194, 23);
-		panel_1.add(textField_2);
-		textField_2.setColumns(10);
+		dayField = new JTextField();
+		dayField.setBounds(0, 152, 194, 23);
+		panel_1.add(dayField);
+		dayField.setColumns(10);
 		
-		JLabel label = new JLabel("Сума переказу:");
-		label.setBounds(10, 135, 178, 16);
-		panel_1.add(label);
+		JLabel amountLabel = new JLabel("Сума переказу:");
+		amountLabel.setBounds(10, 135, 178, 16);
+		panel_1.add(amountLabel);
 		
-		textField_3 = new JTextField();
-		textField_3.setBounds(0, 195, 194, 28);
-		panel_1.add(textField_3);
-		textField_3.setColumns(10);
+		amountField = new JTextField();
+		amountField.setBounds(0, 195, 194, 28);
+		panel_1.add(amountField);
+		amountField.setColumns(10);
 		
-		JButton btnNewButton = new JButton("Обробити");
-		btnNewButton.setBounds(43, 253, 117, 29);
-		panel_1.add(btnNewButton);
-		
-		JLabel label_1 = new JLabel("");
-		label_1.setBounds(0, 225, 194, 16);
-		panel_1.add(label_1);
+		JButton proceedButton = new JButton("Обробити");
+		proceedButton.setBounds(43, 253, 117, 29);
+		panel_1.add(proceedButton);
+		proceedButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String reciever = recieverField.getText();
+				int day = Integer.parseInt(dayField.getText());
+				long amount = Long.parseLong(amountField.getText());
+				String description = descriptionField.getText();
+				BankOperationRes result = Bank.getInstance().addAutoTransaction(ATM.getCardNumber(), reciever, day, amount, description);
+				if(result==BankOperationRes.COMPLETE){
+					ATM.setConsole(ATM.getConsole()+"Auto transaction was added:\nSender card number:\n"
+					+ATM.getCardNumber()+"\nReciever card number:\n" 
+					+ reciever +"\nDay of a month for operation:\n"
+					+day+"\nAmount:\n"
+					+amount+"\nDescription:\n"
+					+description+"\n");
+					recieverField.setText("");
+					dayField.setText("");
+					amountField.setText("");
+					descriptionField.setText("");
+					
+					pane.setText(ATM.getConsole());
+				}else if(result == BankOperationRes.NO_ACCOUNT_TO_SEND){
+					ATM.setConsole(ATM.getConsole()+"Operation denied\nCheck account number\n");
+					pane.setText(ATM.getConsole());
+				}else if(result == BankOperationRes.INVALID_DAY){
+					ATM.setConsole(ATM.getConsole()+"Operation denied\nInvalid day\n");
+					pane.setText(ATM.getConsole());
+				}else{
+					System.err.println("Unexpectable result");
+				}
+				
+			}
+		});
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBounds(456, 6, 138, 288);
 		add(panel_2);
 		panel_2.setLayout(null);
 		
-		JEditorPane pane= new JEditorPane();
+		pane= new JEditorPane();
 		pane.setEditable(false);
 		pane.setText(ATM.getConsole());
 		pane.setBounds(0, 0, 138, 288);

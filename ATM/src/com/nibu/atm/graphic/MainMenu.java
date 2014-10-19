@@ -19,9 +19,9 @@ import com.nibu.atm.BankOperationRes;
 public class MainMenu extends JPanel {
 
 	private static  JPanel instance = new MainMenu();
-	private JTextField cardField;
-	private JTextField summField;
-	private JEditorPane editorPane;
+	private static JTextField cardField;
+	private static JTextField summField;
+	private static JEditorPane editorPane;
 
 	/**
 	 * Create the frame.
@@ -92,6 +92,26 @@ public class MainMenu extends JPanel {
 		});
 		panel.add(autoTransactions);
 		
+		JButton info = new JButton("Інфо про аккаунт");
+		info.setBounds(6, 128, 169, 29);
+		panel.add(info);
+		info.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrame mainFrame = (JFrame)MainMenu.this.getTopLevelAncestor();
+				mainFrame.remove(instance);
+				JPanel info = Info.getInstance();
+				mainFrame.getContentPane().add(info);
+				mainFrame.setContentPane(info);
+				
+				mainFrame.setVisible(true);
+				mainFrame.repaint();
+				
+			}
+		});
+		
+		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(199, 6, 245, 288);
 		this.add(panel_1);
@@ -131,6 +151,7 @@ public class MainMenu extends JPanel {
 					ATM.setConsole(ATM.getConsole()+"Money was sent\n");
 					cardField.setText("");
 					summField.setText("");
+					editorPane.setText(ATM.getConsole());
 				}else if(result == BankOperationRes.NO_ACCOUNT_TO_SEND){
 					ATM.setConsole(ATM.getConsole()+"Operation denied\nCheck the reciever card number\n");
 					editorPane.setText(ATM.getConsole());
@@ -155,9 +176,11 @@ public class MainMenu extends JPanel {
 		editorPane.setBounds(0, 0, 138, 288);
 		panel_2.add(editorPane);
 	}
+	public static void refresh(){
+		editorPane.setText(ATM.getConsole());
+	}
 	public static JPanel getInstance() {
 		// TODO Auto-generated method stub
 		return instance;
 	}
-
 }

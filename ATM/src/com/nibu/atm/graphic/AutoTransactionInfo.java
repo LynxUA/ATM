@@ -14,6 +14,9 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 
+import com.nibu.atm.Bank;
+import com.nibu.atm.BankOperationRes;
+
 public class AutoTransactionInfo extends JPanel {
 
 	private static JPanel instance = new AutoTransactionInfo();
@@ -22,6 +25,7 @@ public class AutoTransactionInfo extends JPanel {
 	private JTextField descriptionField;
 	private JTextField dayField;
 	private JTextField amountField;
+	private JEditorPane editorPane;
 
 	public AutoTransactionInfo() {
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -36,41 +40,41 @@ public class AutoTransactionInfo extends JPanel {
 		panel.setLayout(null);
 		this.add(panel);
 		
-		JLabel label = new JLabel("Редагувати автоматичну транзакцію");
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setBounds(119, 5, 283, 23);
-		panel.add(label);
+		JLabel editLabel = new JLabel("Редагувати автоматичну транзакцію");
+		editLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		editLabel.setBounds(119, 5, 283, 23);
+		panel.add(editLabel);
 		
-		JLabel receiver = new JLabel("Номер картки адресата:");
-		receiver.setBounds(10, 50, 178, 16);
-		panel.add(receiver);
+		JLabel receiverLabel = new JLabel("Номер картки адресата:");
+		receiverLabel.setBounds(10, 50, 178, 16);
+		panel.add(receiverLabel);
 		
 		reciverField = new JTextField();
 		reciverField.setColumns(10);
 		reciverField.setBounds(10, 68, 428, 23);
 		panel.add(reciverField);
 		
-		JLabel description = new JLabel("Опис:");
-		description.setBounds(10, 179, 178, 16);
-		panel.add(description);
+		JLabel descriptionLabel = new JLabel("Опис:");
+		descriptionLabel.setBounds(10, 179, 178, 16);
+		panel.add(descriptionLabel);
 		
 		descriptionField = new JTextField();
 		descriptionField.setColumns(10);
 		descriptionField.setBounds(10, 107, 428, 28);
 		panel.add(descriptionField);
 		
-		JLabel day = new JLabel("День місяця для переказу:");
-		day.setBounds(10, 92, 178, 16);
-		panel.add(day);
+		JLabel dayLabel = new JLabel("День місяця для переказу:");
+		dayLabel.setBounds(10, 92, 178, 16);
+		panel.add(dayLabel);
 		
 		dayField = new JTextField();
 		dayField.setColumns(10);
 		dayField.setBounds(10, 152, 428, 23);
 		panel.add(dayField);
 		
-		JLabel amount = new JLabel("Сума переказу:");
-		amount.setBounds(10, 132, 178, 16);
-		panel.add(amount);
+		JLabel amountLabel = new JLabel("Сума переказу:");
+		amountLabel.setBounds(10, 132, 178, 16);
+		panel.add(amountLabel);
 		
 		amountField = new JTextField();
 		amountField.setColumns(10);
@@ -80,6 +84,23 @@ public class AutoTransactionInfo extends JPanel {
 		JButton proceed = new JButton("Обробити");
 		proceed.setBounds(43, 255, 117, 29);
 		panel.add(proceed);
+		proceed.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				/*BankOperationRes result = Bank.getInstance().addAutoTransaction(ATM.getCardNumber(), reciverField.getText(), dayNumber, money);
+				if(result==BankOperationRes.COMPLETE){
+					ATM.setConsole(ATM.getConsole()+"Limit changed to " + limitField.getText() +"\n");
+					limitField.setText("");
+				}else if(result == BankOperationRes.LIMIT_OVERFLOW){
+					ATM.setConsole(ATM.getConsole()+"Operation denied\nThe limit is higher then bank can give\n");
+					editorPane.setText(ATM.getConsole());
+				}else{
+					System.err.println("Unexpectable result");
+				}*/
+				
+			}
+		});
 		
 		JButton back = new JButton("Повернутися");
 		back.setBounds(0, 3, 107, 29);
@@ -90,6 +111,7 @@ public class AutoTransactionInfo extends JPanel {
 				JFrame mainFrame = (JFrame)AutoTransactionInfo.this.getTopLevelAncestor();
 				mainFrame.remove(instance);
 				JPanel ATPanel = AutoTransactions.getInstance();
+				MainMenu.refresh();
 				mainFrame.getContentPane().add(ATPanel);
 				mainFrame.setContentPane(ATPanel);
 				
@@ -100,16 +122,12 @@ public class AutoTransactionInfo extends JPanel {
 		});
 		panel.add(back);
 		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setBounds(10, 227, 424, 16);
-		panel.add(lblNewLabel);
-		
 		JPanel panel_1 = new JPanel();
 		panel_1.setLayout(null);
 		panel_1.setBounds(456, 7, 138, 288);
 		add(panel_1);
 		
-		JEditorPane editorPane = new JEditorPane();
+		editorPane = new JEditorPane();
 		editorPane.setEditable(false);
 		editorPane.setText(ATM.getConsole());
 		editorPane.setBounds(0, 0, 138, 288);

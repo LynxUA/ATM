@@ -19,9 +19,9 @@ import javax.swing.JEditorPane;
 import com.nibu.atm.Bank;
 import com.nibu.atm.BankOperationRes;
 
-public class PCS extends JPanel {
+public class Info extends JPanel {
 
-	private static JPanel instance = new PCS();
+	private static JPanel instance = new Info();
 	//private JPanel contentPane;
 	private JTextField limitField;
 	private JTextField cardField;
@@ -30,7 +30,7 @@ public class PCS extends JPanel {
 	/**
 	 * Create the frame.
 	 */
-	public PCS() {
+	public Info() {
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
 		this.setLayout(null);
 		this.setBounds(100, 100, 600, 300);
@@ -40,51 +40,27 @@ public class PCS extends JPanel {
 		panel_1.setBounds(6, 6, 438, 288);
 		this.add(panel_1);
 		
-		JLabel autoLabel = new JLabel("Автоматичне перерахування залишку");
+		JLabel autoLabel = new JLabel("Інформація про аккаунт");
 		autoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		autoLabel.setBounds(120, 5, 285, 23);
 		panel_1.add(autoLabel);
 		
-		JLabel limitLabel = new JLabel("Ліміт після якого переводимо:");
-		limitLabel.setBounds(10, 40, 244, 16);
+		JLabel cardNumberLabel = new JLabel("Номер картки: " + Bank.getInstance().getName(ATM.getCardNumber())+" - "+ATM.getCardNumber());
+		cardNumberLabel.setBounds(10, 44, 422, 16);
+		panel_1.add(cardNumberLabel);
+		
+		JLabel balanceLabel = new JLabel("Поточний баланс: " + Bank.getInstance().getBalance(ATM.getCardNumber()));
+		balanceLabel.setBounds(10, 72, 422, 16);
+		panel_1.add(balanceLabel);
+		
+		JLabel limitLabel = new JLabel("Кредитний ліміт: " + Bank.getInstance().getCreditLimit(ATM.getCardNumber()));
+		limitLabel.setBounds(10, 100, 422, 16);
 		panel_1.add(limitLabel);
 		
-		limitField = new JTextField();
-		limitField.setColumns(10);
-		limitField.setBounds(10, 55, 194, 28);
-		panel_1.add(limitField);
+		JLabel maxLimitLabel = new JLabel("Максимальний особистий кредитний ліміт: " + Bank.getInstance().getMaxCreditLimit(ATM.getCardNumber()));
+		maxLimitLabel.setBounds(10, 128, 422, 16);
+		panel_1.add(maxLimitLabel);
 		
-		JLabel cardLabel = new JLabel("Карта (куди переводимо):");
-		cardLabel.setBounds(10, 88, 178, 16);
-		panel_1.add(cardLabel);
-		
-		cardField = new JTextField();
-		cardField.setColumns(10);
-		cardField.setBounds(10, 112, 194, 28);
-		panel_1.add(cardField);
-		
-		JButton save = new JButton("Зберегти");
-		save.setBounds(171, 253, 117, 29);
-		panel_1.add(save);
-		save.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				BankOperationRes result = Bank.getInstance().setMoneyExcessLimit(ATM.getCardNumber(), cardField.getText(), Long.parseLong(limitField.getText()));
-				if(result==BankOperationRes.COMPLETE){
-					ATM.setConsole(ATM.getConsole()+"Limit changed\n");
-					cardField.setText("");
-					limitField.setText("");
-					editorPane.setText(ATM.getConsole());
-				}else if(result == BankOperationRes.NO_ACCOUNT_TO_SEND){
-					ATM.setConsole(ATM.getConsole()+"Operation denied\nCheck the reciever card number\n");
-					editorPane.setText(ATM.getConsole());
-				}else{
-					System.err.println("Unexpectable result");
-				}
-				
-			}
-		});
 		
 		JButton back = new JButton("Повернутися");
 		back.setBounds(0, 3, 107, 29);
@@ -92,8 +68,7 @@ public class PCS extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JFrame mainFrame = (JFrame)PCS.this.getTopLevelAncestor();
-				//mainFrame.refresh();
+				JFrame mainFrame = (JFrame)Info.this.getTopLevelAncestor();
 				mainFrame.remove(instance);
 				JPanel ATPanel = MainMenu.getInstance();
 				MainMenu.refresh();
@@ -106,6 +81,7 @@ public class PCS extends JPanel {
 			}
 		});
 		panel_1.add(back);
+		
 		
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
@@ -123,5 +99,4 @@ public class PCS extends JPanel {
 		// TODO Auto-generated method stub
 		return instance ;
 	}
-
 }
