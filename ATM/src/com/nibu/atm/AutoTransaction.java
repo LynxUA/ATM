@@ -5,10 +5,12 @@ import java.util.Calendar;
 public class AutoTransaction extends Transaction{
 	private int dayOfMonth;
 	private int monthLastTransfer;
+	private String description;
 	
-	public AutoTransaction(Account from, Account to, long moneyAmount, int monthDay) {
+	public AutoTransaction(Account from, Account to, long moneyAmount, int monthDay, String description) {
 		super(from, to, moneyAmount);
 		this.dayOfMonth = monthDay;
+		this.description = description;
 	}
 	
 	

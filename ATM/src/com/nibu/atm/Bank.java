@@ -52,14 +52,14 @@ public class Bank {
 		return BankOperationRes.COMPLETE;
 	}
 	
-	public BankOperationRes addAutoTransaction(String cardFrom, String cardTo, int dayNumber, long money) {
+	public BankOperationRes addAutoTransaction(String cardFrom, String cardTo, int dayNumber, long money, String description) {
 		if (!users.containsKey(cardFrom))
 			return BankOperationRes.NO_SUCH_ACCOUNT;
 		if (!users.containsKey(cardTo))
 			return BankOperationRes.NO_ACCOUNT_TO_SEND;
 		if (dayNumber < 1 || dayNumber > 28)
 			return BankOperationRes.INVALID_DAY;
-		transactionsProcessor.add(new AutoTransaction(users.get(cardFrom), users.get(cardTo), money, dayNumber));
+		transactionsProcessor.add(new AutoTransaction(users.get(cardFrom), users.get(cardTo), money, dayNumber, description));
 		return BankOperationRes.COMPLETE;
 	}
 	
