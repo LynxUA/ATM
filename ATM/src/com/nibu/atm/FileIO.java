@@ -13,14 +13,10 @@ public class FileIO {
 	 * @param fileName
 	 */
 	public static Object loadFile(String fileName) {
-		Object result = null;
-		try {
-			FileInputStream fileIn;
-			fileIn = new FileInputStream(fileName);
-			ObjectInputStream in = new ObjectInputStream(fileIn);
+		Object result = new Object[2];
+		try(FileInputStream fileIn = new FileInputStream(fileName);
+			ObjectInputStream in = new ObjectInputStream(fileIn)) {
 			result = in.readObject();
-			in.close();
-			fileIn.close();
 		} catch (IOException | ClassNotFoundException e) {
 			System.out.println("Unable to load accounts from " + fileName);
 			e.printStackTrace();
@@ -33,7 +29,7 @@ public class FileIO {
 	 * @param fileName
 	 * @throws IOException 
 	 */
-	public static void saveFile(Serializable s, String fileName){
+	public static void saveFile(Serializable[] s, String fileName){
 		try {
 			 FileOutputStream fileOut = new FileOutputStream(fileName);
 			 ObjectOutputStream out = new ObjectOutputStream(fileOut);

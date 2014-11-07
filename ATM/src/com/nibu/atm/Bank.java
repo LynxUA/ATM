@@ -1,5 +1,6 @@
 package com.nibu.atm;
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -13,16 +14,18 @@ public class Bank {
 	
 	private Bank() {
 		File accountsStored = new File("Data.txt");
+		ArrayList<Transaction> transactions = null;
 		if(accountsStored.exists() && !accountsStored.isDirectory()) {
 			Object obj = FileIO.loadFile(accountsStored.getName());
-			if (obj instanceof HashMap<?, ?>) {
-				users = (HashMap<String, Account>) obj;
-			}
+			Serializable[] s = (Serializable[]) obj;
+			users = (HashMap<String, Account>) s[0];
+			transactions = (ArrayList<Transaction>) s[1];
 		} 
 		if (users == null)
 			users = new HashMap<String, Account>();
-		//TODO
-		transactionsProcessor = new TransactionsProcessor();
+		if (transactions == null)
+			transactions = new ArrayList<Transaction>();
+		transactionsProcessor = new TransactionsProcessor(transactions);
 	}
 	
 	public static Bank getInstance() {
@@ -125,6 +128,10 @@ public class Bank {
 		return null;
 	}
 	
+	public void exit() {
+		FileIO.saveFile(new Serializable[] { bank.users, bank.transactionsProcessor.getAutoTransactions() }, "Data.txt");
+	}
+	
 	//Testing
 	public static void main(String[] args) {
 		
@@ -134,6 +141,6 @@ public class Bank {
 		//bank.users.put("DENIS", new Account("Denis", "DENIS", "321"));
 		//bank.users.put("XXXX-XXXX-XXXX-XXXX", new Account("Alex", "XXXX-XXXX-XXXX-XXXX", "qwerty"));/
 		//System.out.println(bank.users.get("DENIS"));
-		FileIO.saveFile(bank.users, "Data.txt");
+		bank.exit();
 	}
 }

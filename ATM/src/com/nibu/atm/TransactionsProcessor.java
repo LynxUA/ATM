@@ -7,8 +7,8 @@ public class TransactionsProcessor {
 	//These should be processed automatically.
 	private List<Transaction> autoTransactions;
 	
-	public TransactionsProcessor() {
-		autoTransactions = new ArrayList<Transaction>();
+	public TransactionsProcessor(ArrayList<Transaction> autoTransactions) {
+		this.autoTransactions = autoTransactions;
 	}
 	
 	public boolean add(Transaction transaction) {
@@ -28,5 +28,9 @@ public class TransactionsProcessor {
 				return false;
 		}
 		return true;
+	}
+	
+	public ArrayList<Transaction> getAutoTransactions() {
+		return new ArrayList<Transaction>(autoTransactions);
 	}
 }
