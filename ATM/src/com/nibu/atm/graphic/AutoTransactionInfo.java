@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.net.ssl.TrustManagerFactorySpi;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -14,20 +15,22 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 
+import com.nibu.atm.AutoTransaction;
 import com.nibu.atm.Bank;
 import com.nibu.atm.BankOperationRes;
 
 public class AutoTransactionInfo extends JPanel {
 
-	private static JPanel instance = new AutoTransactionInfo();
+	private static AutoTransaction transaction = null;
+	private static JPanel instance = null;
 	//private JPanel contentPane;
-	private JTextField reciverField;
-	private JTextField descriptionField;
-	private JTextField dayField;
-	private JTextField amountField;
-	private JEditorPane editorPane;
+	private static JTextField recieverField;
+	private static JTextField descriptionField;
+	private static JTextField dayField;
+	private static JTextField amountField;
+	private static JEditorPane editorPane;
 
-	public AutoTransactionInfo() {
+	private AutoTransactionInfo() {
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//setBounds(100, 100, 450, 300);
 		//contentPane = new JPanel();
@@ -45,14 +48,16 @@ public class AutoTransactionInfo extends JPanel {
 		editLabel.setBounds(119, 5, 283, 23);
 		panel.add(editLabel);
 		
-		JLabel receiverLabel = new JLabel("Номер картки адресата:");
-		receiverLabel.setBounds(10, 50, 178, 16);
-		panel.add(receiverLabel);
+		JLabel recieverLabel = new JLabel("Номер картки адресата:");
+		recieverLabel.setBounds(10, 50, 178, 16);
+		panel.add(recieverLabel);
 		
-		reciverField = new JTextField();
-		reciverField.setColumns(10);
-		reciverField.setBounds(10, 68, 428, 23);
-		panel.add(reciverField);
+		recieverField = new JTextField();
+		recieverField.setColumns(10);
+		recieverField.setBounds(10, 68, 428, 23);
+		recieverField.setText(transaction.getCardToNumber());
+		
+		panel.add(recieverField);
 		
 		JLabel descriptionLabel = new JLabel("Опис:");
 		descriptionLabel.setBounds(10, 179, 178, 16);
@@ -60,7 +65,8 @@ public class AutoTransactionInfo extends JPanel {
 		
 		descriptionField = new JTextField();
 		descriptionField.setColumns(10);
-		descriptionField.setBounds(10, 107, 428, 28);
+		descriptionField.setBounds(10, 197, 428, 28);
+		descriptionField.setText(transaction.getDescription());
 		panel.add(descriptionField);
 		
 		JLabel dayLabel = new JLabel("День місяця для переказу:");
@@ -69,7 +75,8 @@ public class AutoTransactionInfo extends JPanel {
 		
 		dayField = new JTextField();
 		dayField.setColumns(10);
-		dayField.setBounds(10, 152, 428, 23);
+		dayField.setBounds(10, 109, 428, 23);
+		dayField.setText(String.valueOf(transaction.getDay()));
 		panel.add(dayField);
 		
 		JLabel amountLabel = new JLabel("Сума переказу:");
@@ -78,7 +85,8 @@ public class AutoTransactionInfo extends JPanel {
 		
 		amountField = new JTextField();
 		amountField.setColumns(10);
-		amountField.setBounds(10, 195, 184, 28);
+		amountField.setBounds(10, 152, 184, 28);
+		amountField.setText(String.valueOf(transaction.getMoneyAmount()));
 		panel.add(amountField);
 		
 		JButton proceed = new JButton("Обробити");
@@ -88,16 +96,34 @@ public class AutoTransactionInfo extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				/*BankOperationRes result = Bank.getInstance().addAutoTransaction(ATM.getCardNumber(), reciverField.getText(), dayNumber, money);
+				String reciever = recieverField.getText();
+				int day = Integer.parseInt(dayField.getText());
+				long amount = Long.parseLong(amountField.getText());
+				String description = descriptionField.getText();
+				BankOperationRes result = Bank.getInstance().editAutoTransaction(transaction, reciever, day, amount, description);
 				if(result==BankOperationRes.COMPLETE){
-					ATM.setConsole(ATM.getConsole()+"Limit changed to " + limitField.getText() +"\n");
-					limitField.setText("");
-				}else if(result == BankOperationRes.LIMIT_OVERFLOW){
-					ATM.setConsole(ATM.getConsole()+"Operation denied\nThe limit is higher then bank can give\n");
+					ATM.setConsole(ATM.getConsole()+"Auto transaction was added:\nSender card number:\n"
+					+ATM.getCardNumber()+"\nReciever card number:\n" 
+					+ reciever +"\nDay of a month for operation:\n"
+					+day+"\nAmount:\n"
+					+amount+"\nDescription:\n"
+					+description+"\n");
+					recieverField.setText("");
+					amountField.setText("");
+					descriptionField.setText("");
+					dayField.setText("");
+					editorPane.setText(ATM.getConsole());
+					
+					AutoTransactions.refreshTransactions();
+				}else if(result == BankOperationRes.NO_ACCOUNT_TO_SEND){
+					ATM.setConsole(ATM.getConsole()+"Operation denied\nCheck account number\n");
+					editorPane.setText(ATM.getConsole());
+				}else if(result == BankOperationRes.INVALID_DAY){
+					ATM.setConsole(ATM.getConsole()+"Operation denied\nInvalid day\n");
 					editorPane.setText(ATM.getConsole());
 				}else{
 					System.err.println("Unexpectable result");
-				}*/
+				}
 				
 			}
 		});
@@ -132,6 +158,17 @@ public class AutoTransactionInfo extends JPanel {
 		editorPane.setText(ATM.getConsole());
 		editorPane.setBounds(0, 0, 138, 288);
 		panel_1.add(editorPane);
+	}
+	public static void setTransaction(AutoTransaction transaction){
+		AutoTransactionInfo.transaction = transaction;
+		System.out.println("Транзакція: \nНомер картки: "+transaction.getCardToNumber()+"\nAmount: "+transaction.getMoneyAmount() +"\nDescription: "+transaction.getDescription()+ "\nDay: "+ transaction.getDay());
+		
+		if(instance == null)
+			instance = new AutoTransactionInfo();
+		recieverField.setText(transaction.getCardToNumber());
+		descriptionField.setText(transaction.getDescription());
+		dayField.setText(String.valueOf(transaction.getDay()));
+		amountField.setText(String.valueOf(transaction.getMoneyAmount()));
 	}
 	public static JPanel getInstance(){
 		return instance;

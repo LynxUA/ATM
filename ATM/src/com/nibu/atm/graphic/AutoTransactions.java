@@ -4,12 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JList;
 import javax.swing.AbstractListModel;
 import javax.swing.JScrollBar;
@@ -23,6 +25,7 @@ import javax.swing.JButton;
 import javax.swing.JTextArea;
 import javax.swing.JEditorPane;
 
+import com.nibu.atm.AutoTransaction;
 import com.nibu.atm.Bank;
 import com.nibu.atm.BankOperationRes;
 
@@ -31,42 +34,57 @@ public class AutoTransactions extends JPanel {
 	private static JPanel instance = new AutoTransactions();
 	private JTable table;
 	private JTextField recieverField;
-	private JTextField descriptionField;
 	private JTextField dayField;
 	private JTextField amountField;
+	private JTextField descriptionField;
 	
 	private JEditorPane pane;
 
+	private static List<AutoTransaction> transactions;
+	private static DefaultTableModel model;
 	/**
 	 * Create the frame.
 	 */
-	public AutoTransactions() {
+	private AutoTransactions() {
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
 		this.setLayout(null);
 		this.setBounds(100, 100, 600, 300);
-		
+		this.transactions = Bank.getInstance().getAutoTransactions(ATM.getCardNumber());
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 6, 238, 288);
 		this.add(panel);
 		panel.setLayout(null);
 		//panel.add(list);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(6, 37, 226, 245);
-		panel.add(scrollPane);
 		
-		String [] names = {"Номер картки", "Опис", "Дата", "Сума"};
-		table = new JTable();
+		
+		
+		model = new DefaultTableModel();
+		refreshTransactions();
+		table = new JTable(model);
 		table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 	        public void valueChanged(ListSelectionEvent event) {
-	            // do some actions here, for example
-	            // print first column value from selected row
-	            System.out.println(table.getValueAt(table.getSelectedRow(), 0).toString());
+	        	JFrame mainFrame = (JFrame)AutoTransactions.this.getTopLevelAncestor();
+	        	if(mainFrame != null){
+	        	mainFrame.remove(instance);
+				System.out.println(table.getSelectedRow());
+				AutoTransactionInfo.setTransaction(transactions.get(table.getSelectedRow()));
+				JPanel ATPanel = AutoTransactionInfo.getInstance();
+				mainFrame.getContentPane().add(ATPanel);
+				mainFrame.setContentPane(ATPanel);
+				
+				mainFrame.setVisible(true);
+				mainFrame.repaint();
+	        	}
+	        	//table.getValueAt(table.getSelectedRow(), 0).toString();
+				
 	        }
 	    });
 		table.setBounds(0, 0, 1, 1);
 		//table.a
-		scrollPane.add(table);
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setBounds(6, 37, 226, 245);
+		panel.add(scrollPane);
 		
 		JButton back = new JButton("Повернутися");
 		back.setBounds(0, 6, 107, 29);
@@ -111,28 +129,28 @@ public class AutoTransactions extends JPanel {
 		descriptionLabel.setBounds(10, 179, 178, 16);
 		panel_1.add(descriptionLabel);
 		
-		descriptionField = new JTextField();
-		descriptionField.setBounds(0, 105, 194, 28);
-		panel_1.add(descriptionField);
-		descriptionField.setColumns(10);
+		dayField = new JTextField();
+		dayField.setBounds(0, 105, 194, 28);
+		panel_1.add(dayField);
+		dayField.setColumns(10);
 		
 		JLabel dayLabel = new JLabel("День місяця для переказу (1-28):");
 		dayLabel.setBounds(10, 88, 178, 16);
 		panel_1.add(dayLabel);
 		
-		dayField = new JTextField();
-		dayField.setBounds(0, 152, 194, 23);
-		panel_1.add(dayField);
-		dayField.setColumns(10);
+		amountField = new JTextField();
+		amountField.setBounds(0, 152, 194, 23);
+		panel_1.add(amountField);
+		amountField.setColumns(10);
 		
 		JLabel amountLabel = new JLabel("Сума переказу:");
 		amountLabel.setBounds(10, 135, 178, 16);
 		panel_1.add(amountLabel);
 		
-		amountField = new JTextField();
-		amountField.setBounds(0, 195, 194, 28);
-		panel_1.add(amountField);
-		amountField.setColumns(10);
+		descriptionField = new JTextField();
+		descriptionField.setBounds(0, 195, 194, 28);
+		panel_1.add(descriptionField);
+		descriptionField.setColumns(10);
 		
 		JButton proceedButton = new JButton("Обробити");
 		proceedButton.setBounds(43, 253, 117, 29);
@@ -154,10 +172,10 @@ public class AutoTransactions extends JPanel {
 					+amount+"\nDescription:\n"
 					+description+"\n");
 					recieverField.setText("");
-					dayField.setText("");
 					amountField.setText("");
 					descriptionField.setText("");
-					
+					dayField.setText("");
+					AutoTransactions.this.refreshTable();
 					pane.setText(ATM.getConsole());
 				}else if(result == BankOperationRes.NO_ACCOUNT_TO_SEND){
 					ATM.setConsole(ATM.getConsole()+"Operation denied\nCheck account number\n");
@@ -184,9 +202,37 @@ public class AutoTransactions extends JPanel {
 		panel_2.add(pane);
 		//System.out.println(this.getX()+"*"+this.getY());
 	}
+	private void refreshTable(){
+		String [] names = {"Номер картки", "Опис", "Дата", "Сума"};
+		int size = transactions.size();
+		Object [][] data = new Object[size][4];
+		for(int i = 0; i<transactions.size(); i++)
+		{
+			data[i][0]=transactions.get(i).getCardToNumber();
+			data[i][1]=transactions.get(i).getDescription();
+			data[i][2]=transactions.get(i).getDay();
+			data[i][3]=transactions.get(i).getMoneyAmount();
+		}
+		table.removeAll();
+		table = new JTable(data,names);
+	}
 
 	public static JPanel getInstance() {
 		// TODO Auto-generated method stub
 		return instance;
+	}
+	public static void refreshTransactions(){
+		
+		String [] names = {"Номер картки", "Опис", "Дата", "Сума"};
+		int size = transactions.size();
+		Object [][] data = new Object[size][4];
+		for(int i = 0; i<transactions.size(); i++)
+		{
+			data[i][0]=transactions.get(i).getCardToNumber();
+			data[i][1]=transactions.get(i).getDescription();
+			data[i][2]=transactions.get(i).getDay();
+			data[i][3]=transactions.get(i).getMoneyAmount();
+		}
+		model.setDataVector(data, names);
 	}
 }

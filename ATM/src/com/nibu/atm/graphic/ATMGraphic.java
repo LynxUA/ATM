@@ -15,6 +15,8 @@ import javax.swing.GroupLayout.Alignment;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JEditorPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -58,6 +60,51 @@ public class ATMGraphic extends JFrame {
 		backgroundPanel.setForeground(new Color(112, 128, 144));
 		backgroundPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(backgroundPanel);
+		
+		this.addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				System.out.println("here");
+				Bank.getInstance().exit();
+				
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent e) {
+				
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(128, 128, 128));
