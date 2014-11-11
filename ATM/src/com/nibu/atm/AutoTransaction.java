@@ -1,8 +1,9 @@
 package com.nibu.atm;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
-public class AutoTransaction extends Transaction{
+public class AutoTransaction extends Transaction implements Serializable{
 	private int dayOfMonth;
 	private int monthLastTransfer;
 	private String description;

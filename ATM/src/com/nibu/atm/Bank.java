@@ -288,12 +288,12 @@ public class Bank extends UnicastRemoteObject implements ClientInterface {
 		return loadedAccounts.get(cardNumber).getBalance();
 	}
 	
-	public List<AutoTransaction> getAutoTransactions(String cardNumber) {
+	public ArrayList<AutoTransaction> getAutoTransactions(String cardNumber) {
+		System.out.println("CARD NUMBER: " + cardNumber);
 		if (loadedAccounts.containsKey(cardNumber)) {
 			Account account = loadedAccounts.get(cardNumber);
 			//Not deep copy, just to avoid removing objects from account.autoTransactions
-			List<AutoTransaction> result = new ArrayList<AutoTransaction>(account.autoTransactions);
-			return result;
+			return account.autoTransactions;
 		}
 		return null;
 	}

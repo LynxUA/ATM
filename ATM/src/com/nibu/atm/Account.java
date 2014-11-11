@@ -1,12 +1,11 @@
 package com.nibu.atm;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 
 @SuppressWarnings("serial")
 public class Account implements Serializable {
-	List<AutoTransaction> autoTransactions = new ArrayList<AutoTransaction>();
+	ArrayList<AutoTransaction> autoTransactions = new ArrayList<AutoTransaction>();
 	/** Each card when account created has base credit limit*/
 	public static final long BASE_CREDIT_LIMIT = 1500;
 	/** Basically credit limit may be expanded to this value */

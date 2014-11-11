@@ -2,7 +2,7 @@ package com.nibu.atm;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.List;
+import java.util.ArrayList;
 
 public interface ClientInterface extends Remote {
 	
@@ -26,7 +26,7 @@ public interface ClientInterface extends Remote {
 	
 	public long getBalance(String cardNum) throws RemoteException;
 	
-	public List<AutoTransaction> getAutoTransactions(String cardNum) throws RemoteException;
+	public ArrayList<AutoTransaction> getAutoTransactions(String cardNum) throws RemoteException;
 	
 	public void exit() throws RemoteException;
 }

@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -41,7 +42,7 @@ public class AutoTransactions extends JPanel {
 	
 	private JEditorPane pane;
 
-	private static List<AutoTransaction> transactions;
+	private static ArrayList<AutoTransaction> transactions;
 	private static DefaultTableModel model;
 	/**
 	 * Create the frame.
