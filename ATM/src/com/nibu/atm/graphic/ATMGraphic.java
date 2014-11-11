@@ -17,6 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.rmi.RemoteException;
 
 import javax.swing.JEditorPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -90,7 +91,12 @@ public class ATMGraphic extends JFrame {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				System.out.println("here");
-				ATM.getDAO().exit();
+				try {
+					ATM.getDAO().exit();
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
 			}
 			
@@ -163,7 +169,13 @@ public class ATMGraphic extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//System.out.println(cardField.getText() + passwordField.getPassword());
-				BankOperationRes result = Bank.getInstance().authorize(cardField.getText(), String.valueOf(passwordField.getPassword()));
+				BankOperationRes result = null;
+				try {
+					result = ATM.getDAO().authorize(cardField.getText(), String.valueOf(passwordField.getPassword()));
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				if(result==BankOperationRes.COMPLETE){
 					ATM.setConsole(ATM.getConsole()+"Login succeded\n");
 					ATM.setCardNumber(cardField.getText());
