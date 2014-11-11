@@ -1,6 +1,8 @@
 package com.nibu.atm;
 
-public class Transaction {
+import java.io.Serializable;
+
+public class Transaction implements Serializable{
 	protected String from;
 	protected String to;
 	protected long moneyAmount;

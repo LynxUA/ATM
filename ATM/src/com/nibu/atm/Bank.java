@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -293,8 +294,10 @@ public class Bank extends UnicastRemoteObject implements ClientInterface {
 		if (loadedAccounts.containsKey(cardNumber)) {
 			Account account = loadedAccounts.get(cardNumber);
 			//Not deep copy, just to avoid removing objects from account.autoTransactions
-			return account.autoTransactions;
+			ArrayList<AutoTransaction> result = new ArrayList<AutoTransaction>(account.autoTransactions);
+			return result;
 		}
+		System.out.println("NEAR NULL");
 		return null;
 	}
 	
