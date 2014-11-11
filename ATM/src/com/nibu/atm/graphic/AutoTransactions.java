@@ -64,17 +64,19 @@ public class AutoTransactions extends JPanel {
 		table = new JTable(model);
 		table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 	        public void valueChanged(ListSelectionEvent event) {
-	        	JFrame mainFrame = (JFrame)AutoTransactions.this.getTopLevelAncestor();
-	        	if(mainFrame != null){
-	        	mainFrame.remove(instance);
-				System.out.println(table.getSelectedRow());
-				AutoTransactionInfo.setTransaction(transactions.get(table.getSelectedRow()));
-				JPanel ATPanel = AutoTransactionInfo.getInstance();
-				mainFrame.getContentPane().add(ATPanel);
-				mainFrame.setContentPane(ATPanel);
-				
-				mainFrame.setVisible(true);
-				mainFrame.repaint();
+	        	if(table != null){
+		        	JFrame mainFrame = (JFrame)AutoTransactions.this.getTopLevelAncestor();
+		        	if(mainFrame != null){
+		        	mainFrame.remove(instance);
+					//System.out.println(table.getSelectedRow());
+					AutoTransactionInfo.setTransaction(transactions.get(table.getSelectedRow()));
+					JPanel ATPanel = AutoTransactionInfo.getInstance();
+					mainFrame.getContentPane().add(ATPanel);
+					mainFrame.setContentPane(ATPanel);
+					
+					mainFrame.setVisible(true);
+					mainFrame.repaint();
+		        	}
 	        	}
 	        	//table.getValueAt(table.getSelectedRow(), 0).toString();
 				
@@ -159,34 +161,38 @@ public class AutoTransactions extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String reciever = recieverField.getText();
-				int day = Integer.parseInt(dayField.getText());
-				long amount = Long.parseLong(amountField.getText());
-				String description = descriptionField.getText();
-				BankOperationRes result = Bank.getInstance().addAutoTransaction(ATM.getCardNumber(), reciever, day, amount, description);
-				if(result==BankOperationRes.COMPLETE){
-					ATM.setConsole(ATM.getConsole()+"Auto transaction was added:\nSender card number:\n"
-					+ATM.getCardNumber()+"\nReciever card number:\n" 
-					+ reciever +"\nDay of a month for operation:\n"
-					+day+"\nAmount:\n"
-					+amount+"\nDescription:\n"
-					+description+"\n");
-					recieverField.setText("");
-					amountField.setText("");
-					descriptionField.setText("");
-					dayField.setText("");
-					AutoTransactions.this.refreshTable();
-					pane.setText(ATM.getConsole());
-				}else if(result == BankOperationRes.NO_ACCOUNT_TO_SEND){
-					ATM.setConsole(ATM.getConsole()+"Operation denied\nCheck account number\n");
-					pane.setText(ATM.getConsole());
-				}else if(result == BankOperationRes.INVALID_DAY){
-					ATM.setConsole(ATM.getConsole()+"Operation denied\nInvalid day\n");
+				if(recieverField.getText().equals(ATM.getCardNumber())){
+					ATM.setConsole(ATM.getConsole()+"Operation denied\nYou can't give money to yourself\n");
 					pane.setText(ATM.getConsole());
 				}else{
-					System.err.println("Unexpectable result");
+					String reciever = recieverField.getText();
+					int day = Integer.parseInt(dayField.getText());
+					long amount = Long.parseLong(amountField.getText());
+					String description = descriptionField.getText();
+					BankOperationRes result = Bank.getInstance().addAutoTransaction(ATM.getCardNumber(), reciever, day, amount, description);
+					if(result==BankOperationRes.COMPLETE){
+						ATM.setConsole(ATM.getConsole()+"Auto transaction was added:\nSender card number:\n"
+						+ATM.getCardNumber()+"\nReciever card number:\n" 
+						+ reciever +"\nDay of a month for operation:\n"
+						+day+"\nAmount:\n"
+						+amount+"\nDescription:\n"
+						+description+"\n");
+						recieverField.setText("");
+						amountField.setText("");
+						descriptionField.setText("");
+						dayField.setText("");
+						AutoTransactions.refreshTransactions();
+						pane.setText(ATM.getConsole());
+					}else if(result == BankOperationRes.NO_ACCOUNT_TO_SEND){
+						ATM.setConsole(ATM.getConsole()+"Operation denied\nCheck account number\n");
+						pane.setText(ATM.getConsole());
+					}else if(result == BankOperationRes.INVALID_DAY){
+						ATM.setConsole(ATM.getConsole()+"Operation denied\nInvalid day\n");
+						pane.setText(ATM.getConsole());
+					}else{
+						System.err.println("Unexpectable result");
+					}
 				}
-				
 			}
 		});
 		
@@ -222,7 +228,7 @@ public class AutoTransactions extends JPanel {
 		return instance;
 	}
 	public static void refreshTransactions(){
-		
+		transactions = Bank.getInstance().getAutoTransactions(ATM.getCardNumber());
 		String [] names = {"Номер картки", "Опис", "Дата", "Сума"};
 		int size = transactions.size();
 		Object [][] data = new Object[size][4];

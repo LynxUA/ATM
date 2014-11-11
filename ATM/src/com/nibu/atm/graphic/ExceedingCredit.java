@@ -61,6 +61,7 @@ public class ExceedingCredit extends JPanel {
 					ATM.setConsole(ATM.getConsole()+"Limit changed to " + limitField.getText() +"\n");
 					limitField.setText("");
 					editorPane.setText(ATM.getConsole());
+					Info.refreshInfo();
 				}else if(result == BankOperationRes.LIMIT_OVERFLOW){
 					ATM.setConsole(ATM.getConsole()+"Operation denied\nThe limit is higher then bank can give\n");
 					editorPane.setText(ATM.getConsole());

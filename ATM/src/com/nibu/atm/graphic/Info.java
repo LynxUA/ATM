@@ -26,7 +26,9 @@ public class Info extends JPanel {
 	private JTextField limitField;
 	private JTextField cardField;
 	private JEditorPane editorPane;
-
+	private static JLabel balanceLabel;
+	private static JLabel limitLabel;
+	private static JLabel maxLimitLabel;
 	/**
 	 * Create the frame.
 	 */
@@ -49,15 +51,15 @@ public class Info extends JPanel {
 		cardNumberLabel.setBounds(10, 44, 422, 16);
 		panel_1.add(cardNumberLabel);
 		
-		JLabel balanceLabel = new JLabel("Поточний баланс: " + Bank.getInstance().getBalance(ATM.getCardNumber()));
+		balanceLabel = new JLabel("Поточний баланс: " + Bank.getInstance().getBalance(ATM.getCardNumber()));
 		balanceLabel.setBounds(10, 72, 422, 16);
 		panel_1.add(balanceLabel);
 		
-		JLabel limitLabel = new JLabel("Кредитний ліміт: " + Bank.getInstance().getCreditLimit(ATM.getCardNumber()));
+		limitLabel = new JLabel("Кредитний ліміт: " + Bank.getInstance().getCreditLimit(ATM.getCardNumber()));
 		limitLabel.setBounds(10, 100, 422, 16);
 		panel_1.add(limitLabel);
 		
-		JLabel maxLimitLabel = new JLabel("Максимальний особистий кредитний ліміт: " + Bank.getInstance().getMaxCreditLimit(ATM.getCardNumber()));
+		maxLimitLabel = new JLabel("Максимальний особистий кредитний ліміт: " + Bank.getInstance().getMaxCreditLimit(ATM.getCardNumber()));
 		maxLimitLabel.setBounds(10, 128, 422, 16);
 		panel_1.add(maxLimitLabel);
 		
@@ -98,5 +100,10 @@ public class Info extends JPanel {
 	public static JPanel getInstance() {
 		// TODO Auto-generated method stub
 		return instance ;
+	}
+	public static void refreshInfo(){
+		balanceLabel.setText("Поточний баланс: " + Bank.getInstance().getBalance(ATM.getCardNumber()));
+		limitLabel.setText("Кредитний ліміт: " + Bank.getInstance().getCreditLimit(ATM.getCardNumber()));
+		maxLimitLabel.setText("Максимальний особистий кредитний ліміт: " + Bank.getInstance().getMaxCreditLimit(ATM.getCardNumber()));
 	}
 }

@@ -146,22 +146,27 @@ public class MainMenu extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				BankOperationRes result = Bank.getInstance().sendMoney(ATM.getCardNumber(), cardField.getText(), Long.parseLong(summField.getText()));
-				if(result==BankOperationRes.COMPLETE){
-					ATM.setConsole(ATM.getConsole()+"Money was sent\n");
-					cardField.setText("");
-					summField.setText("");
-					editorPane.setText(ATM.getConsole());
-				}else if(result == BankOperationRes.NO_ACCOUNT_TO_SEND){
-					ATM.setConsole(ATM.getConsole()+"Operation denied\nCheck the reciever card number\n");
-					editorPane.setText(ATM.getConsole());
-				}else if(result == BankOperationRes.NOT_ENOUGH_MONEY){
-					ATM.setConsole(ATM.getConsole()+"Operation denied\nYou don't have enough money\n");
+				if(cardField.getText().equals(ATM.getCardNumber())){
+					ATM.setConsole(ATM.getConsole()+"Operation denied\nYou can't give money to yourself\n");
 					editorPane.setText(ATM.getConsole());
 				}else{
-					System.err.println("Unexpectable result");
+					BankOperationRes result = Bank.getInstance().sendMoney(ATM.getCardNumber(), cardField.getText(), Long.parseLong(summField.getText()));
+					if(result==BankOperationRes.COMPLETE){
+						ATM.setConsole(ATM.getConsole()+"Money was sent\n");
+						cardField.setText("");
+						summField.setText("");
+						editorPane.setText(ATM.getConsole());
+						Info.refreshInfo();
+					}else if(result == BankOperationRes.NO_ACCOUNT_TO_SEND){
+						ATM.setConsole(ATM.getConsole()+"Operation denied\nCheck the reciever card number\n");
+						editorPane.setText(ATM.getConsole());
+					}else if(result == BankOperationRes.NOT_ENOUGH_MONEY){
+						ATM.setConsole(ATM.getConsole()+"Operation denied\nYou don't have enough money\n");
+						editorPane.setText(ATM.getConsole());
+					}else{
+						System.err.println("Unexpectable result");
+					}
 				}
-				
 			}
 		});
 		

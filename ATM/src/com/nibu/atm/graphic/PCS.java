@@ -70,19 +70,23 @@ public class PCS extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				BankOperationRes result = Bank.getInstance().setMoneyExcessLimit(ATM.getCardNumber(), cardField.getText(), Long.parseLong(limitField.getText()));
-				if(result==BankOperationRes.COMPLETE){
-					ATM.setConsole(ATM.getConsole()+"Limit changed\n");
-					cardField.setText("");
-					limitField.setText("");
-					editorPane.setText(ATM.getConsole());
-				}else if(result == BankOperationRes.NO_ACCOUNT_TO_SEND){
-					ATM.setConsole(ATM.getConsole()+"Operation denied\nCheck the reciever card number\n");
+				if(cardField.getText().equals(ATM.getCardNumber())){
+					ATM.setConsole(ATM.getConsole()+"Operation denied\nYou can't give money to yourself\n");
 					editorPane.setText(ATM.getConsole());
 				}else{
-					System.err.println("Unexpectable result");
+					BankOperationRes result = Bank.getInstance().setMoneyExcessLimit(ATM.getCardNumber(), cardField.getText(), Long.parseLong(limitField.getText()));
+					if(result==BankOperationRes.COMPLETE){
+						ATM.setConsole(ATM.getConsole()+"Limit changed\n");
+						cardField.setText("");
+						limitField.setText("");
+						editorPane.setText(ATM.getConsole());
+					}else if(result == BankOperationRes.NO_ACCOUNT_TO_SEND){
+						ATM.setConsole(ATM.getConsole()+"Operation denied\nCheck the reciever card number\n");
+						editorPane.setText(ATM.getConsole());
+					}else{
+						System.err.println("Unexpectable result");
+					}
 				}
-				
 			}
 		});
 		

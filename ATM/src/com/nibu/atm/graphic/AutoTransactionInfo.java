@@ -96,35 +96,39 @@ public class AutoTransactionInfo extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String reciever = recieverField.getText();
-				int day = Integer.parseInt(dayField.getText());
-				long amount = Long.parseLong(amountField.getText());
-				String description = descriptionField.getText();
-				BankOperationRes result = Bank.getInstance().editAutoTransaction(transaction, reciever, day, amount, description);
-				if(result==BankOperationRes.COMPLETE){
-					ATM.setConsole(ATM.getConsole()+"Auto transaction was added:\nSender card number:\n"
-					+ATM.getCardNumber()+"\nReciever card number:\n" 
-					+ reciever +"\nDay of a month for operation:\n"
-					+day+"\nAmount:\n"
-					+amount+"\nDescription:\n"
-					+description+"\n");
-					recieverField.setText("");
-					amountField.setText("");
-					descriptionField.setText("");
-					dayField.setText("");
-					editorPane.setText(ATM.getConsole());
-					
-					AutoTransactions.refreshTransactions();
-				}else if(result == BankOperationRes.NO_ACCOUNT_TO_SEND){
-					ATM.setConsole(ATM.getConsole()+"Operation denied\nCheck account number\n");
-					editorPane.setText(ATM.getConsole());
-				}else if(result == BankOperationRes.INVALID_DAY){
-					ATM.setConsole(ATM.getConsole()+"Operation denied\nInvalid day\n");
+				if(recieverField.getText().equals(ATM.getCardNumber())){
+					ATM.setConsole(ATM.getConsole()+"Operation denied\nYou can't give money to yourself\n");
 					editorPane.setText(ATM.getConsole());
 				}else{
-					System.err.println("Unexpectable result");
+					String reciever = recieverField.getText();
+					int day = Integer.parseInt(dayField.getText());
+					long amount = Long.parseLong(amountField.getText());
+					String description = descriptionField.getText();
+					BankOperationRes result = Bank.getInstance().editAutoTransaction(transaction, reciever, day, amount, description);
+					if(result==BankOperationRes.COMPLETE){
+						ATM.setConsole(ATM.getConsole()+"Auto transaction was added:\nSender card number:\n"
+						+ATM.getCardNumber()+"\nReciever card number:\n" 
+						+ reciever +"\nDay of a month for operation:\n"
+						+day+"\nAmount:\n"
+						+amount+"\nDescription:\n"
+						+description+"\n");
+						recieverField.setText("");
+						amountField.setText("");
+						descriptionField.setText("");
+						dayField.setText("");
+						editorPane.setText(ATM.getConsole());
+						
+						AutoTransactions.refreshTransactions();
+					}else if(result == BankOperationRes.NO_ACCOUNT_TO_SEND){
+						ATM.setConsole(ATM.getConsole()+"Operation denied\nCheck account number\n");
+						editorPane.setText(ATM.getConsole());
+					}else if(result == BankOperationRes.INVALID_DAY){
+						ATM.setConsole(ATM.getConsole()+"Operation denied\nInvalid day\n");
+						editorPane.setText(ATM.getConsole());
+					}else{
+						System.err.println("Unexpectable result");
+					}
 				}
-				
 			}
 		});
 		
