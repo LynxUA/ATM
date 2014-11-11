@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 import javax.net.ssl.TrustManagerFactorySpi;
 import javax.swing.JFrame;
@@ -104,7 +105,13 @@ public class AutoTransactionInfo extends JPanel {
 					int day = Integer.parseInt(dayField.getText());
 					long amount = Long.parseLong(amountField.getText());
 					String description = descriptionField.getText();
-					BankOperationRes result = Bank.getInstance().editAutoTransaction(transaction, reciever, day, amount, description);
+					BankOperationRes result = null;
+					try {
+						result = ATM.getDAO().editAutoTransaction(transaction, reciever, day, amount, description);
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					if(result==BankOperationRes.COMPLETE){
 						ATM.setConsole(ATM.getConsole()+"Auto transaction was added:\nSender card number:\n"
 						+ATM.getCardNumber()+"\nReciever card number:\n" 

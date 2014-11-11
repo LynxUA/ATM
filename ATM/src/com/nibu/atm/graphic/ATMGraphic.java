@@ -90,7 +90,7 @@ public class ATMGraphic extends JFrame {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				System.out.println("here");
-				Bank.getInstance().exit();
+				ATM.getDAO().exit();
 				
 			}
 			
