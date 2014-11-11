@@ -29,23 +29,23 @@ public class Bank extends UnicastRemoteObject implements ClientInterface {
 	private HashMap<String, Account> loadedAccounts = new HashMap<String, Account>() {
 		@Override
 		public Account get(Object o) {
-			Account result = super.get(o);
-			if (result == null) {
+			if (super.get(o) == null) {
 				try {
 					PreparedStatement statement = conn.prepareStatement("SELECT * FROM accounts WHERE cardNumber = ?");
 					statement.setString(1, (String) o);
 					ResultSet rs = statement.executeQuery();
 					while (rs.next()) {
-						result = new Account(rs.getString("ownerName"), rs.getString("cardNumber"), 
+						Account result = new Account(rs.getString("ownerName"), rs.getString("cardNumber"), 
 											 rs.getString("password"), rs.getLong("maxCreditLimit"), 
 											 rs.getLong("creditLimit"), rs.getLong("balance"), 
 											 rs.getString("protectingAccount"), rs.getLong("protectMoneyAmount"));
+						put((String) o, result);
 					}
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
 			}
-			return result;
+			return super.get(o);
 		}
 		
 		@Override
@@ -131,14 +131,14 @@ public class Bank extends UnicastRemoteObject implements ClientInterface {
 			System.out.println("Driver not found: " + driver);
 		}
 		try {
-			conn = DriverManager.getConnection(jdbcURL, "alex", "***");
+			conn = DriverManager.getConnection(jdbcURL, "alex", "56627422");
 		} catch (SQLException e) {
 			System.out.println("Unable to establish connection");
 		}
 		
 		//System.out.println("STARTING TO MAKE TABLES");   initialiseTablesAndData();
 		
-		/*
+		
 		ArrayList<AutoTransaction> transactions = new ArrayList<AutoTransaction>();
 		try {
 			Statement statement = conn.createStatement();
@@ -158,7 +158,7 @@ public class Bank extends UnicastRemoteObject implements ClientInterface {
 			public Account get(String cardNumber) {
 				return loadedAccounts.get(cardNumber);
 			}
-		});*/
+		});
 		
 		System.out.println("EVERYTHING INITIALISED OKAY");
 	}
@@ -298,6 +298,7 @@ public class Bank extends UnicastRemoteObject implements ClientInterface {
 		return null;
 	}
 	
+	@Override
 	public void exit() {
 		try(PreparedStatement statement = conn.prepareStatement("UPDATE accounts SET " +
 				"maxCreditlimit = ?, creditLimit = ?, balance = ?, " +
