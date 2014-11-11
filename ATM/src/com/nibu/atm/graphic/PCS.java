@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -74,7 +75,16 @@ public class PCS extends JPanel {
 					ATM.setConsole(ATM.getConsole()+"Operation denied\nYou can't give money to yourself\n");
 					editorPane.setText(ATM.getConsole());
 				}else{
-					BankOperationRes result = Bank.getInstance().setMoneyExcessLimit(ATM.getCardNumber(), cardField.getText(), Long.parseLong(limitField.getText()));
+					BankOperationRes result = null;
+					try {
+						result = ATM.getDAO().setMoneyExcessLimit(ATM.getCardNumber(), cardField.getText(), Long.parseLong(limitField.getText()));
+					} catch (NumberFormatException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					if(result==BankOperationRes.COMPLETE){
 						ATM.setConsole(ATM.getConsole()+"Limit changed\n");
 						cardField.setText("");

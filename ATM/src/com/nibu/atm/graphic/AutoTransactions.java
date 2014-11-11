@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -49,7 +50,12 @@ public class AutoTransactions extends JPanel {
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
 		this.setLayout(null);
 		this.setBounds(100, 100, 600, 300);
-		this.transactions = Bank.getInstance().getAutoTransactions(ATM.getCardNumber());
+		try {
+			this.transactions = ATM.getDAO().getAutoTransactions(ATM.getCardNumber());
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 6, 238, 288);
 		this.add(panel);
@@ -169,7 +175,13 @@ public class AutoTransactions extends JPanel {
 					int day = Integer.parseInt(dayField.getText());
 					long amount = Long.parseLong(amountField.getText());
 					String description = descriptionField.getText();
-					BankOperationRes result = Bank.getInstance().addAutoTransaction(ATM.getCardNumber(), reciever, day, amount, description);
+					BankOperationRes result = null;
+					try {
+						result = ATM.getDAO().addAutoTransaction(ATM.getCardNumber(), reciever, day, amount, description);
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					if(result==BankOperationRes.COMPLETE){
 						ATM.setConsole(ATM.getConsole()+"Auto transaction was added:\nSender card number:\n"
 						+ATM.getCardNumber()+"\nReciever card number:\n" 
@@ -228,7 +240,12 @@ public class AutoTransactions extends JPanel {
 		return instance;
 	}
 	public static void refreshTransactions(){
-		transactions = Bank.getInstance().getAutoTransactions(ATM.getCardNumber());
+		try {
+			transactions = ATM.getDAO().getAutoTransactions(ATM.getCardNumber());
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String [] names = {"Номер картки", "Опис", "Дата", "Сума"};
 		int size = transactions.size();
 		Object [][] data = new Object[size][4];

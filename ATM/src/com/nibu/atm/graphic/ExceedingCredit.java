@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -56,7 +57,16 @@ public class ExceedingCredit extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				BankOperationRes result = Bank.getInstance().changeCreditLimit(ATM.getCardNumber(), Integer.parseInt(limitField.getText()));
+				BankOperationRes result = null;
+				try {
+					result = ATM.getDAO().changeCreditLimit(ATM.getCardNumber(), Integer.parseInt(limitField.getText()));
+				} catch (NumberFormatException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				if(result==BankOperationRes.COMPLETE){
 					ATM.setConsole(ATM.getConsole()+"Limit changed to " + limitField.getText() +"\n");
 					limitField.setText("");

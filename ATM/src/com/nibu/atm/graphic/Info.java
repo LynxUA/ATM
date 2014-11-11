@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -47,19 +48,40 @@ public class Info extends JPanel {
 		autoLabel.setBounds(120, 5, 285, 23);
 		panel_1.add(autoLabel);
 		
-		JLabel cardNumberLabel = new JLabel("Номер картки: " + Bank.getInstance().getName(ATM.getCardNumber())+" - "+ATM.getCardNumber());
+		JLabel cardNumberLabel = null;
+		try {
+			cardNumberLabel = new JLabel("Номер картки: " + ATM.getDAO().getName(ATM.getCardNumber())+" - "+ATM.getCardNumber());
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		cardNumberLabel.setBounds(10, 44, 422, 16);
 		panel_1.add(cardNumberLabel);
 		
-		balanceLabel = new JLabel("Поточний баланс: " + Bank.getInstance().getBalance(ATM.getCardNumber()));
+		try {
+			balanceLabel = new JLabel("Поточний баланс: " + ATM.getDAO().getBalance(ATM.getCardNumber()));
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		balanceLabel.setBounds(10, 72, 422, 16);
 		panel_1.add(balanceLabel);
 		
-		limitLabel = new JLabel("Кредитний ліміт: " + Bank.getInstance().getCreditLimit(ATM.getCardNumber()));
+		try {
+			limitLabel = new JLabel("Кредитний ліміт: " + ATM.getDAO().getCreditLimit(ATM.getCardNumber()));
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		limitLabel.setBounds(10, 100, 422, 16);
 		panel_1.add(limitLabel);
 		
-		maxLimitLabel = new JLabel("Максимальний особистий кредитний ліміт: " + Bank.getInstance().getMaxCreditLimit(ATM.getCardNumber()));
+		try {
+			maxLimitLabel = new JLabel("Максимальний особистий кредитний ліміт: " + ATM.getDAO().getMaxCreditLimit(ATM.getCardNumber()));
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		maxLimitLabel.setBounds(10, 128, 422, 16);
 		panel_1.add(maxLimitLabel);
 		
@@ -102,8 +124,23 @@ public class Info extends JPanel {
 		return instance ;
 	}
 	public static void refreshInfo(){
-		balanceLabel.setText("Поточний баланс: " + Bank.getInstance().getBalance(ATM.getCardNumber()));
-		limitLabel.setText("Кредитний ліміт: " + Bank.getInstance().getCreditLimit(ATM.getCardNumber()));
-		maxLimitLabel.setText("Максимальний особистий кредитний ліміт: " + Bank.getInstance().getMaxCreditLimit(ATM.getCardNumber()));
+		try {
+			balanceLabel.setText("Поточний баланс: " + ATM.getDAO().getBalance(ATM.getCardNumber()));
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			limitLabel.setText("Кредитний ліміт: " + ATM.getDAO().getCreditLimit(ATM.getCardNumber()));
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			maxLimitLabel.setText("Максимальний особистий кредитний ліміт: " + ATM.getDAO().getMaxCreditLimit(ATM.getCardNumber()));
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
