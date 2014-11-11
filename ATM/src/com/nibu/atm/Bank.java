@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -33,7 +32,8 @@ public class Bank extends UnicastRemoteObject implements ClientInterface {
 			Account result = super.get(o);
 			if (result == null) {
 				try {
-					PreparedStatement statement = conn.prepareStatement("SELECT FROM accounts WHERE cardNumber = ?");
+					PreparedStatement statement = conn.prepareStatement("SELECT * FROM accounts WHERE cardNumber = ?");
+					statement.setString(1, (String) o);
 					ResultSet rs = statement.executeQuery();
 					while (rs.next()) {
 						result = new Account(rs.getString("ownerName"), rs.getString("cardNumber"), 
