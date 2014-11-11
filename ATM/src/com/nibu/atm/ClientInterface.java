@@ -27,4 +27,6 @@ public interface ClientInterface extends Remote {
 	public long getBalance(String cardNum) throws RemoteException;
 	
 	public List<AutoTransaction> getAutoTransactions(String cardNum) throws RemoteException;
+	
+	public void exit() throws RemoteException;
 }
