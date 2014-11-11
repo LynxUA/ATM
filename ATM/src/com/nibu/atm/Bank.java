@@ -235,7 +235,7 @@ public class Bank extends UnicastRemoteObject implements ClientInterface {
 		transaction.edit(cardTo, money, dayNumber, description);
 		try {
 			PreparedStatement statement = conn.prepareStatement("UPDATE autoTransactions SET " +
-					"toAccount = ?, moneyAmount = ?, monthDay = ?, description = ? WHERE id = ?");
+					"toAccount = ?, moneyAmount = ?, monthDay = ?, description = ? WHERE transaction_id = ?");
 			statement.setString(1, cardTo);
 			statement.setLong(2, money);
 			statement.setInt(3, dayNumber);
