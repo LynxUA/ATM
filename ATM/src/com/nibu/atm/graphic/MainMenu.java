@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JEditorPane;
 
@@ -185,11 +186,14 @@ public class MainMenu extends JPanel {
 		panel_2.setBounds(456, 6, 138, 288);
 		add(panel_2);
 		
-		editorPane = new JEditorPane();
+		editorPane= new JEditorPane();
 		editorPane.setEditable(false);
 		editorPane.setText(ATM.getConsole());
-		editorPane.setBounds(0, 0, 138, 288);
-		panel_2.add(editorPane);
+		//pane.setBounds(0, 0, 138, 288);
+		
+		JScrollPane scrollPane2 = new JScrollPane(editorPane);
+		scrollPane2.setBounds(0, 0, 138, 288);
+		panel_2.add(scrollPane2);
 	}
 	public static void refresh(){
 		editorPane.setText(ATM.getConsole());

@@ -112,11 +112,14 @@ public class Info extends JPanel {
 		panel.setBounds(456, 6, 138, 288);
 		add(panel);
 		
-		editorPane = new JEditorPane();
+		editorPane= new JEditorPane();
 		editorPane.setEditable(false);
 		editorPane.setText(ATM.getConsole());
-		editorPane.setBounds(0, 0, 138, 288);
-		panel.add(editorPane);
+		//pane.setBounds(0, 0, 138, 288);
+		
+		JScrollPane scrollPane2 = new JScrollPane(editorPane);
+		scrollPane2.setBounds(0, 0, 138, 288);
+		panel_1.add(scrollPane2);
 	}
 
 	public static JPanel getInstance() {

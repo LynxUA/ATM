@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -164,11 +165,14 @@ public class AutoTransactionInfo extends JPanel {
 		panel_1.setBounds(456, 7, 138, 288);
 		add(panel_1);
 		
-		editorPane = new JEditorPane();
+		editorPane= new JEditorPane();
 		editorPane.setEditable(false);
 		editorPane.setText(ATM.getConsole());
-		editorPane.setBounds(0, 0, 138, 288);
-		panel_1.add(editorPane);
+		//pane.setBounds(0, 0, 138, 288);
+		
+		JScrollPane scrollPane2 = new JScrollPane(editorPane);
+		scrollPane2.setBounds(0, 0, 138, 288);
+		panel_1.add(scrollPane2);
 	}
 	public static void setTransaction(AutoTransaction transaction){
 		AutoTransactionInfo.transaction = transaction;

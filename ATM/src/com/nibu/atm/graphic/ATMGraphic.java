@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
@@ -55,7 +56,7 @@ public class ATMGraphic extends JFrame {
 	 */
 	private ATMGraphic() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 600, 325);
+		setBounds(100, 100, 620, 345);
 		backgroundPanel = new JPanel();
 		backgroundPanel.setBackground(new Color(169, 169, 169));
 		backgroundPanel.setForeground(new Color(112, 128, 144));
@@ -119,11 +120,22 @@ public class ATMGraphic extends JFrame {
 		panel_1 = new JPanel();
 		panel_1.setLayout(null);
 		
+		/*
 		editorPane = new JEditorPane();
 		editorPane.setEditable(false);
 		editorPane.setText(ATM.getConsole());
 		editorPane.setBounds(0, 0, 138, 288);
-		panel_1.add(editorPane);
+		panel_1.add(editorPane);*/
+		
+		editorPane= new JEditorPane();
+		editorPane.setEditable(false);
+		editorPane.setText(ATM.getConsole());
+		//pane.setBounds(0, 0, 138, 288);
+		
+		JScrollPane scrollPane2 = new JScrollPane(editorPane);
+		scrollPane2.setBounds(0, 0, 138, 288);
+		panel_1.add(scrollPane2);
+		
 		GroupLayout gl_backgroundPanel = new GroupLayout(backgroundPanel);
 		gl_backgroundPanel.setHorizontalGroup(
 			gl_backgroundPanel.createParallelGroup(Alignment.LEADING)

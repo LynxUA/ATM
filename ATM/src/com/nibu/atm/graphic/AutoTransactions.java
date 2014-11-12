@@ -217,8 +217,12 @@ public class AutoTransactions extends JPanel {
 		pane= new JEditorPane();
 		pane.setEditable(false);
 		pane.setText(ATM.getConsole());
-		pane.setBounds(0, 0, 138, 288);
-		panel_2.add(pane);
+		//pane.setBounds(0, 0, 138, 288);
+		
+		JScrollPane scrollPane2 = new JScrollPane(pane);
+		scrollPane2.setBounds(0, 0, 138, 288);
+		panel_2.add(scrollPane2);
+		//panel_2.add(pane);
 		//System.out.println(this.getX()+"*"+this.getY());
 	}
 	private void refreshTable(){
