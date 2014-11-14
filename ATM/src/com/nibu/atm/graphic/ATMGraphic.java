@@ -16,6 +16,7 @@ import javax.swing.GroupLayout.Alignment;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.rmi.RemoteException;
@@ -63,32 +64,7 @@ public class ATMGraphic extends JFrame {
 		backgroundPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(backgroundPanel);
 		
-		this.addWindowListener(new WindowListener() {
-			
-			@Override
-			public void windowOpened(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowIconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowDeiconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowDeactivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
+		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				System.out.println("here");
@@ -98,18 +74,6 @@ public class ATMGraphic extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
-			}
-			
-			@Override
-			public void windowClosed(WindowEvent e) {
-				
-			}
-			
-			@Override
-			public void windowActivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 		
