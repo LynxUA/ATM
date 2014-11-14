@@ -132,7 +132,7 @@ public class Bank extends UnicastRemoteObject implements ClientInterface {
 			System.out.println("Driver not found: " + driver);
 		}
 		try {
-			conn = DriverManager.getConnection(jdbcURL, "alex", "56627422");
+			conn = DriverManager.getConnection(jdbcURL, "alex", "*");
 		} catch (SQLException e) {
 			System.out.println("Unable to establish connection");
 		}
