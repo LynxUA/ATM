@@ -40,7 +40,7 @@ public class AutoTransactions extends JPanel {
 	private JTextField amountField;
 	private JTextField descriptionField;
 	
-	private JEditorPane pane;
+	private static JEditorPane pane;
 
 	private static ArrayList<AutoTransaction> transactions;
 	private static DefaultTableModel model;
@@ -195,7 +195,6 @@ public class AutoTransactions extends JPanel {
 						descriptionField.setText("");
 						dayField.setText("");
 						AutoTransactions.refreshTransactions();
-						pane.setText(ATM.getConsole());
 					}else if(result == BankOperationRes.NO_ACCOUNT_TO_SEND){
 						ATM.setConsole(ATM.getConsole()+"Operation denied\nCheck account number\n");
 						pane.setText(ATM.getConsole());
@@ -262,5 +261,6 @@ public class AutoTransactions extends JPanel {
 			data[i][3]=transactions.get(i).getMoneyAmount();
 		}
 		model.setDataVector(data, names);
+		pane.setText(ATM.getConsole());
 	}
 }

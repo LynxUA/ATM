@@ -59,6 +59,8 @@ public class ExceedingCredit extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				BankOperationRes result = null;
+				if(limitField.getText()==null)
+					return;
 				try {
 					result = ATM.getDAO().changeCreditLimit(ATM.getCardNumber(), Integer.parseInt(limitField.getText()));
 				} catch (NumberFormatException e1) {

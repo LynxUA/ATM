@@ -119,7 +119,7 @@ public class Info extends JPanel {
 		
 		JScrollPane scrollPane2 = new JScrollPane(editorPane);
 		scrollPane2.setBounds(0, 0, 138, 288);
-		panel_1.add(scrollPane2);
+		panel.add(scrollPane2);
 	}
 
 	public static JPanel getInstance() {
