@@ -67,6 +67,9 @@ public class AutoTransactions extends JPanel {
 		
 		
 		model = new DefaultTableModel();
+		pane= new JEditorPane();
+		pane.setEditable(false);
+		pane.setText(ATM.getConsole());
 		refreshTransactions();
 		table = new JTable(model);
 		table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
@@ -213,9 +216,6 @@ public class AutoTransactions extends JPanel {
 		add(panel_2);
 		panel_2.setLayout(null);
 		
-		pane= new JEditorPane();
-		pane.setEditable(false);
-		pane.setText(ATM.getConsole());
 		//pane.setBounds(0, 0, 138, 288);
 		
 		JScrollPane scrollPane2 = new JScrollPane(pane);
