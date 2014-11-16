@@ -1,6 +1,7 @@
 package com.nibu.atm;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -61,8 +62,8 @@ public class Bank extends UnicastRemoteObject implements ClientInterface {
 			 		"cardNumber VARCHAR(19) NOT NULL PRIMARY KEY," +
 					"maxCreditLimit NUMBER(18) NOT NULL," +
 					"creditLimit NUMBER(18) NOT NULL," +
-					"ownerName VARCHAR(20) NOT NULL," +
-					"password VARCHAR(50) NOT NULL," +
+					"ownerName VARCHAR(255) NOT NULL," +
+					"password VARCHAR(255) NOT NULL," +
 					"balance NUMBER(18)," +
 					"protectingAccount VARCHAR(19)," +
 					"protectMoneyAmount NUMBER(18))");
@@ -74,30 +75,34 @@ public class Bank extends UnicastRemoteObject implements ClientInterface {
 					"moneyAmount NUMBER(18) NOT NULL," +
 					"monthDay NUMBER(5) NOT NULL," +
 					"monthLastTransfer NUMBER(5) NOT NULL," +
-					"description VARCHAR(200) NOT NULL)");
+					"description VARCHAR(255) NOT NULL)");
 					
 			s.executeUpdate("CREATE SEQUENCE TRANSACTION_SEQ " +
 							"START WITH 0 " +
 							"MAXVALUE 999999999999999999 " +
 							"MINVALUE 0 ");
 			
-			addUser("1111-2222-3333-4444", //cardNumber
-					 5000,				   //maxCreditLimit
-					 1500,				   //creditLimit (current one)
-					 "Alex Nikitin",	   //name of owner
-					 "alex123",			   //password
-					 534789,			   //balance
-					 null,				   //protecting account
-					 0);				   //protecting money
-			
-			addUser("5555-6666-7777-8888",
-					 5000,
-					 1500,
-					 "Denis Burlakov",
-					 "denis456",
-					 534789,
-					 null,
-					 0);
+			try {
+				addUser("1111-2222-3333-4444", //cardNumber
+						 5000,				   //maxCreditLimit
+						 1500,				   //creditLimit (current one)
+						 "Alex Nikitin",	   //name of owner
+						 HashPassword.sha1("alex123"),			   //hashed password
+						 534789,			   //balance
+						 null,				   //protecting account
+						 0);				   //protecting money
+				
+				addUser("5555-6666-7777-8888",
+						 5000,
+						 1500,
+						 "Denis Burlakov",
+						 HashPassword.sha1("denis456"),
+						 534789,
+						 null,
+						 0);
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			}
 			
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -132,7 +137,7 @@ public class Bank extends UnicastRemoteObject implements ClientInterface {
 			System.out.println("Driver not found: " + driver);
 		}
 		try {
-			conn = DriverManager.getConnection(jdbcURL, "alex", "*");
+			conn = DriverManager.getConnection(jdbcURL, "alex", "56627422");
 		} catch (SQLException e) {
 			System.out.println("Unable to establish connection");
 		}

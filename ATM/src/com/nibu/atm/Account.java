@@ -1,5 +1,6 @@
 package com.nibu.atm;
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 
@@ -49,7 +50,12 @@ public class Account implements Serializable {
 	}
 	
 	public boolean checkPassword(String cardNumber, String password) {
-		return this.cardNumber.equals(cardNumber) && this.password.equals(password);
+		try {
+			return this.cardNumber.equals(cardNumber) && this.password.equals(HashPassword.sha1(password));
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	/**
