@@ -233,10 +233,19 @@ public class Bank extends UnicastRemoteObject implements ClientInterface {
 			return BankOperationRes.NO_ACCOUNT_TO_SEND;
 		if (dayNumber < 1 || dayNumber > 28)
 			return BankOperationRes.INVALID_DAY;
-		transaction.edit(cardTo, money, dayNumber, description);
+		long id = transaction.getId();
+		ArrayList<Transaction> list = transactionsProcessor.getAutoTransactions();
+		for (int i = 0; i < list.size(); i++) {
+			AutoTransaction a = (AutoTransaction) list.get(i);
+			if (a.getId() == id) {
+				a.edit(cardTo, money, dayNumber, description);
+				break;
+			}
+		}
 		try {
-			PreparedStatement statement = conn.prepareStatement("UPDATE autoTransactions SET " +
-					"toAccount = ?, moneyAmount = ?, monthDay = ?, description = ? WHERE transaction_id = ?");
+			PreparedStatement statement = conn.prepareStatement("UPDATE autotransactions SET " +
+					"toaccount = ?, moneyamount = ?, monthday = ?, description = ? " +
+					"WHERE transaction_id = ?");
 			statement.setString(1, cardTo);
 			statement.setLong(2, money);
 			statement.setInt(3, dayNumber);
@@ -294,8 +303,7 @@ public class Bank extends UnicastRemoteObject implements ClientInterface {
 		if (loadedAccounts.containsKey(cardNumber)) {
 			Account account = loadedAccounts.get(cardNumber);
 			//Not deep copy, just to avoid removing objects from account.autoTransactions
-			ArrayList<AutoTransaction> result = new ArrayList<AutoTransaction>(account.autoTransactions);
-			return result;
+			return account.autoTransactions;
 		}
 		System.out.println("NEAR NULL");
 		return null;
